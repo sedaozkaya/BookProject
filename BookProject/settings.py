@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'advert'
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Giriş yaptıktan sonra yönlendirilecek sayfa
+LOGIN_REDIRECT_URL = '/'
+
+# Giriş yapılmadan erişim varsa yönlendirme
+LOGIN_URL = '/login/'
+LOGOUT_REDIRECT_URL = '/'  # çıkış sonrası anasayfaya yönlendir
