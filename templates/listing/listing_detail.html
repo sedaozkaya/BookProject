@@ -1,8 +1,59 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<h2>{{ listing.title }}</h2>
-<p>{{ listing.description }}</p>
-{% if listing.image %}
-  <img src="{{ listing.image.url }}" alt="İlan resmi" style="max-width:400px;">
-{% endif %}
+<div class="container mt-4">
+  <a href="{% url 'home' %}" class="btn btn-secondary mb-3">Geri Dön</a>
+
+  <div class="card mb-4 p-3">
+    <div class="row g-3">
+      <!-- Resim sütunu -->
+      <div class="col-md-4">
+        {% if listing.image and listing.image.name %}
+          <img src="{{ listing.image.url }}" alt="{{ listing.title }}" class="img-fluid rounded">
+        {% else %}
+          <img src="/media/listing_images/default.png" alt="Varsayılan Resim" class="img-fluid rounded">
+        {% endif %}
+      </div>
+
+      <!-- Bilgi sütunu -->
+      <div class="col-md-8">
+        <h2>{{ listing.title }}</h2>
+        <p><strong>Seviye:</strong> {{ listing.get_level_display }}</p>
+        <p><strong>Tür:</strong> {{ listing.get_listing_type_display }}</p>
+        <p><strong>Bağış Türü:</strong> {{ listing.get_donation_type_display }}</p>
+
+        {% if listing.donation_type == 'paid' %}
+          <p><strong>Fiyat:</strong> {{ listing.price }} ₺</p>
+        {% endif %}
+
+        <p><strong>Sayfa Sayısı:</strong> {{ listing.page_count }}</p>
+        <p><strong>İlgili Ders:</strong> {{ listing.related_course }}</p>
+
+        {% if listing.school_name %}
+          <p><strong>Okul Adı:</strong> {{ listing.school_name }}</p>
+        {% endif %}
+
+        {% if listing.valid_year %}
+          <p><strong>Geçerlilik Yılı:</strong> {{ listing.valid_year }}</p>
+        {% endif %}
+
+        {% if listing.resolution_level %}
+          <p><strong>Çözünürlük Seviyesi:</strong> {{ listing.get_resolution_level_display }}</p>
+        {% endif %}
+
+        {% if listing.publish_year %}
+          <p><strong>Yayın Yılı:</strong> {{ listing.publish_year }}</p>
+        {% endif %}
+
+        {% if listing.publisher %}
+          <p><strong>Yayıncı:</strong> {{ listing.publisher }}</p>
+        {% endif %}
+
+        <p><strong>İlan Sahibi:</strong> {{ listing.user.username }}</p>
+        <p><small>Oluşturulma Tarihi: {{ listing.created_at|date:"d/m/Y H:i" }}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
