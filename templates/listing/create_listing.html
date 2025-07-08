@@ -1,10 +1,32 @@
-{% extends 'advert/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <div class="container mt-4">
   <h2>İlan Oluştur</h2>
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {# Ürün adı (title) alanı #}
+    <div class="mb-3" id="field-title">
+      <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+      {{ form.title }}
+      {% if form.title.errors %}
+        <div class="text-danger">{{ form.title.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    {# Seviye (level) alanı #}
+    <div class="mb-3" id="field-level">
+      <label for="{{ form.level.id_for_label }}" class="form-label">{{ form.level.label }}</label>
+      {{ form.level }}
+      {% if form.level.errors %}
+        <div class="text-danger">{{ form.level.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    {# Diğer alanlar döngü ile #}
     {% for field in form %}
+      {% if field.name != 'title' and field.name != 'level' %}
       <div class="mb-3" id="field-{{ field.name }}">
         <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
         {{ field }}
@@ -12,7 +34,9 @@
           <div class="text-danger">{{ field.errors|striptags }}</div>
         {% endif %}
       </div>
+      {% endif %}
     {% endfor %}
+
     <button type="submit" class="btn btn-primary">Kaydet</button>
   </form>
 </div>
@@ -24,23 +48,33 @@
 
     const bookOnlyFields = ['publish_year', 'publisher', 'resolution_level'];
     bookOnlyFields.forEach(field => {
-      document.getElementById('field-' + field).style.display =
-        (listingType === 'book') ? 'block' : 'none';
+      const el = document.getElementById('field-' + field);
+      if (el) {
+        el.style.display = (listingType === 'book') ? 'block' : 'none';
+      }
     });
 
     const noteOnlyFields = ['school_name', 'valid_year'];
     noteOnlyFields.forEach(field => {
-      document.getElementById('field-' + field).style.display =
-        (listingType === 'note') ? 'block' : 'none';
+      const el = document.getElementById('field-' + field);
+      if (el) {
+        el.style.display = (listingType === 'note') ? 'block' : 'none';
+      }
     });
 
     const priceField = document.getElementById('field-price');
-    priceField.style.display = (donationType === 'paid') ? 'block' : 'none';
+    if (priceField) {
+      priceField.style.display = (donationType === 'paid') ? 'block' : 'none';
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('#id_listing_type').addEventListener('change', updateFieldVisibility);
-    document.querySelector('#id_donation_type').addEventListener('change', updateFieldVisibility);
+    const listingTypeElement = document.querySelector('#id_listing_type');
+    const donationTypeElement = document.querySelector('#id_donation_type');
+
+    if(listingTypeElement) listingTypeElement.addEventListener('change', updateFieldVisibility);
+    if(donationTypeElement) donationTypeElement.addEventListener('change', updateFieldVisibility);
+
     updateFieldVisibility();
   });
 </script>

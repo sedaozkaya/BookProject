@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.shortcuts import render, redirect
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
+
+from .models import Listing
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -30,17 +32,19 @@ def register(request):
             return redirect('login')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'advert/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
 
 def home(request):
-    return render(request, 'advert/home.html')
+    listings = Listing.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'listings': listings})
 
 
 
 @login_required
 def create_listing(request):
     if request.method == 'POST':
-        form = ListingForm(request.POST)
+
+        form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.user = request.user
@@ -49,5 +53,9 @@ def create_listing(request):
     else:
         form = ListingForm()
     return render(request, 'listing/create_listing.html', {'form': form})
+
+def listing_detail(request, pk):
+    listing = get_object_or_404(Listing, pk=pk)
+    return render(request, 'listing/listing_detail.html', {'listing': listing})
 
 

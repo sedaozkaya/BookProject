@@ -7,7 +7,8 @@ class ListingForm(forms.ModelForm):
         fields = [
             'listing_type', 'donation_type', 'price', 'page_count',
             'related_course', 'school_name', 'valid_year',
-            'resolution_level', 'publish_year', 'publisher'
+            'resolution_level', 'publish_year', 'publisher',
+            'image'
         ]
         widgets = {
             'listing_type': forms.Select(attrs={'class': 'form-select'}),
@@ -20,4 +21,5 @@ class ListingForm(forms.ModelForm):
             'resolution_level': forms.Select(attrs={'class': 'form-select'}),
             'publish_year': forms.NumberInput(attrs={'class': 'form-control'}),
             'publisher': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }

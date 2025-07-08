@@ -16,6 +16,16 @@ class Listing(models.Model):
         ('high', 'Çok Çözülmüş'),
         ('full', 'Hepsi Çözülmüş'),
     ]
+    LEVEL_CHOICES = [
+        ('primary', 'İlkokul'),
+        ('middle', 'Ortaokul'),
+        ('high', 'Lise'),
+        ('university', 'Üniversite'),
+        ('general', 'Genel'),
+    ]
+
+    title = models.CharField(max_length=200)  # Ürün adı için
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='general')  # Seviye için
 
     listing_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     donation_type = models.CharField(max_length=10, choices=DONATION_TYPE_CHOICES)
@@ -29,6 +39,7 @@ class Listing(models.Model):
     publisher = models.CharField(max_length=200, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='listing_images/', default='default.png', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.get_listing_type_display()} - {self.related_course}"
+        return f"{self.title} - {self.get_level_display()}"

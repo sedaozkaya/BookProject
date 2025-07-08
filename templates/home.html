@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Hoşgeldiniz!</h1>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_listing' %}" class="btn btn-success mb-3">İlan Oluştur</a>
+  {% else %}
+    <p>İlan oluşturmak için <a href="{% url 'login' %}">giriş yapmalısınız</a>.</p>
+  {% endif %}
+
+  <h2>İlanlar</h2>
+
+  {% if listings %}
+    <div class="row">
+      {% for listing in listings %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            {% if listing.image %}
+              <img src="{{ listing.image.url }}" class="card-img-top" alt="İlan Resmi">
+            {% else %}
+              <img src="{% static 'default.png' %}" class="card-img-top" alt="Varsayılan Resim">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ listing.title }}</h5>
+              {% if listing.donation_type == 'free' %}
+                <p class="text-success fw-bold">Bağış</p>
+              {% else %}
+                <p class="text-danger fw-bold">Ücretli: {{ listing.price }} ₺</p>
+              {% endif %}
+              <p class="card-text">
+                {{ listing.related_course }}<br>
+                <small>İlan Sahibi: {{ listing.user.username }}</small>
+              </p>
+              <a href="{% url 'listing_detail' listing.id %}" class="btn btn-primary btn-sm">Detay</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Henüz ilan yok.</p>
+  {% endif %}
+</div>
+{% endblock %}
