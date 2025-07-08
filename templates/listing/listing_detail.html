@@ -52,6 +52,13 @@
 
         <p><strong>İlan Sahibi:</strong> {{ listing.user.username }}</p>
         <p><small>Oluşturulma Tarihi: {{ listing.created_at|date:"d/m/Y H:i" }}</small></p>
+
+        {% if listing.donation_type == 'free' %}
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success mt-3">İlgileniyorum</button>
+          </form>
+        {% endif %}
       </div>
     </div>
   </div>

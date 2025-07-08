@@ -10,6 +10,57 @@
   {% else %}
     <p>İlan oluşturmak için <a href="{% url 'login' %}">giriş yapmalısınız</a>.</p>
   {% endif %}
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-2">
+    <select name="level" class="form-select">
+      <option value="">Seviye</option>
+      <option value="primary" {% if request.GET.level == "primary" %}selected{% endif %}>İlkokul</option>
+      <option value="middle" {% if request.GET.level == "middle" %}selected{% endif %}>Ortaokul</option>
+      <option value="high" {% if request.GET.level == "high" %}selected{% endif %}>Lise</option>
+      <option value="university" {% if request.GET.level == "university" %}selected{% endif %}>Üniversite</option>
+      <option value="general" {% if request.GET.level == "general" %}selected{% endif %}>Genel</option>
+
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select name="listing_type" class="form-select">
+      <option value="">Tür</option>
+      <option value="book" {% if request.GET.listing_type == "book" %}selected{% endif %}>Kitap</option>
+      <option value="note" {% if request.GET.listing_type == "note" %}selected{% endif %}>Ders Notu</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <select name="donation_type" class="form-select">
+      <option value="">Bağış Türü</option>
+      <option value="free" {% if request.GET.donation_type == "free" %}selected{% endif %}>Bağış</option>
+      <option value="paid" {% if request.GET.donation_type == "paid" %}selected{% endif %}>Ücretli</option>
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <input type="text" name="related_course" placeholder="Ders Adı"
+           value="{{ request.GET.related_course }}" class="form-control">
+  </div>
+
+  <div class="col-md-1">
+    <input type="number" name="min_price" placeholder="Min ₺"
+           value="{{ request.GET.min_price }}" class="form-control" min="0">
+  </div>
+
+  <div class="col-md-1">
+    <input type="number" name="max_price" placeholder="Max ₺"
+           value="{{ request.GET.max_price }}" class="form-control" min="0">
+  </div>
+
+  <div class="col-md-1">
+    <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+  </div>
+
+  <div class="col-md-1">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">Sıfırla</a>
+  </div>
+</form>
 
   <h2>İlanlar</h2>
 
