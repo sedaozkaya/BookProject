@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="container mt-4">
   <h2>İlan Oluştur</h2>
@@ -24,16 +26,16 @@
       {% endif %}
     </div>
 
-    {# Diğer alanlar döngü ile #}
+    {# Diğer alanlar (image dahil) #}
     {% for field in form %}
-      {% if field.name != 'title' and field.name != 'level' %}
-      <div class="mb-3" id="field-{{ field.name }}">
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-          <div class="text-danger">{{ field.errors|striptags }}</div>
-        {% endif %}
-      </div>
+      {% if field.name not in 'title level' %}
+        <div class="mb-3" id="field-{{ field.name }}">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="text-danger">{{ field.errors|striptags }}</div>
+          {% endif %}
+        </div>
       {% endif %}
     {% endfor %}
 
@@ -43,37 +45,31 @@
 
 <script>
   function updateFieldVisibility() {
-    const listingType = document.querySelector('#id_listing_type').value;
-    const donationType = document.querySelector('#id_donation_type').value;
+    const listingType = document.querySelector('#id_listing_type')?.value;
+    const donationType = document.querySelector('#id_donation_type')?.value;
 
     const bookOnlyFields = ['publish_year', 'publisher', 'resolution_level'];
     bookOnlyFields.forEach(field => {
       const el = document.getElementById('field-' + field);
-      if (el) {
-        el.style.display = (listingType === 'book') ? 'block' : 'none';
-      }
+      if (el) el.style.display = (listingType === 'book') ? 'block' : 'none';
     });
 
     const noteOnlyFields = ['school_name', 'valid_year'];
     noteOnlyFields.forEach(field => {
       const el = document.getElementById('field-' + field);
-      if (el) {
-        el.style.display = (listingType === 'note') ? 'block' : 'none';
-      }
+      if (el) el.style.display = (listingType === 'note') ? 'block' : 'none';
     });
 
     const priceField = document.getElementById('field-price');
-    if (priceField) {
-      priceField.style.display = (donationType === 'paid') ? 'block' : 'none';
-    }
+    if (priceField) priceField.style.display = (donationType === 'paid') ? 'block' : 'none';
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     const listingTypeElement = document.querySelector('#id_listing_type');
     const donationTypeElement = document.querySelector('#id_donation_type');
 
-    if(listingTypeElement) listingTypeElement.addEventListener('change', updateFieldVisibility);
-    if(donationTypeElement) donationTypeElement.addEventListener('change', updateFieldVisibility);
+    if (listingTypeElement) listingTypeElement.addEventListener('change', updateFieldVisibility);
+    if (donationTypeElement) donationTypeElement.addEventListener('change', updateFieldVisibility);
 
     updateFieldVisibility();
   });

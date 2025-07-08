@@ -39,7 +39,12 @@ class Listing(models.Model):
     publisher = models.CharField(max_length=200, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='listing_images/', default='default.png', blank=True, null=True)
+    image = models.ImageField(
+        upload_to='listing_images/',
+        default='listing_images/default.png',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.title} - {self.get_level_display()}"

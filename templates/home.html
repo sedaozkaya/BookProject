@@ -18,10 +18,10 @@
       {% for listing in listings %}
         <div class="col-md-4">
           <div class="card mb-4">
-            {% if listing.image %}
+            {% if listing.image and listing.image.name %}
               <img src="{{ listing.image.url }}" class="card-img-top" alt="İlan Resmi">
             {% else %}
-              <img src="{% static 'default.png' %}" class="card-img-top" alt="Varsayılan Resim">
+              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
             {% endif %}
             <div class="card-body">
               <h5 class="card-title">{{ listing.title }}</h5>
