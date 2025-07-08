@@ -1,12 +1,14 @@
 {% extends 'advert/base.html' %}
-{% block title %}Ana Sayfa{% endblock %}
 {% block content %}
-<div class="text-center">
-    <h1>Kitap ve Ders Notu Paylaşım Platformuna Hoş Geldiniz!</h1>
-    {% if user.is_authenticated %}
-        <p class="lead">Yeni bir ilan oluşturmak ister misiniz?</p>
-    {% else %}
-        <p class="lead">Lütfen giriş yapın veya kayıt olun.</p>
-    {% endif %}
+<div class="container mt-4">
+  <h1>Hoşgeldiniz!</h1>
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_listing' %}" class="btn btn-success mb-3">İlan Oluştur</a>
+  {% else %}
+    <p>İlan oluşturmak için <a href="{% url 'login' %}">giriş yapmalısınız</a>.</p>
+  {% endif %}
+
+  <!-- Buraya ilan listeleme kodları ileride eklenebilir -->
 </div>
 {% endblock %}
