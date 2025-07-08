@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Favorilerim</h2>
+
+  {% if favorites %}
+    <div class="row">
+      {% for fav in favorites %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if fav.listing.image and fav.listing.image.name %}
+              <img src="{{ fav.listing.image.url }}" class="card-img-top" alt="{{ fav.listing.title }}">
+            {% else %}
+              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ fav.listing.title }}</h5>
+              <p class="card-text">{{ fav.listing.related_course }}</p>
+              <a href="{% url 'listing_detail' fav.listing.id %}" class="btn btn-primary btn-sm">Detay</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Henüz hiç favori ilanınız yok.</p>
+  {% endif %}
+</div>
+{% endblock %}

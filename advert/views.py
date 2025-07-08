@@ -6,8 +6,9 @@ from django import forms
 from django.shortcuts import render, redirect
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
+from .models import Listing, Favorite
 
-from .models import Listing
+
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -49,17 +50,34 @@ def create_listing(request):
         form = ListingForm()
     return render(request, 'listing/create_listing.html', {'form': form})
 
+
+
+
+
 def listing_detail(request, pk):
-    listing = Listing.objects.get(pk=pk)
+    listing = get_object_or_404(Listing, pk=pk)
+
+    is_favorited = False
+    if request.user.is_authenticated:
+        is_favorited = Favorite.objects.filter(user=request.user, listing=listing).exists()
 
     if request.method == 'POST':
-        if listing.donation_type == 'free':
-            # Burada daha sonra mesajlaşma veya kayıt yapılabilir
-            messages.success(request, "İlginiz için teşekkürler! İlan sahibine bildirildi.")
-            return redirect('listing_detail', pk=pk)
+        if 'favorite' in request.POST:
+            if request.user.is_authenticated:
+                if not is_favorited:
+                    Favorite.objects.create(user=request.user, listing=listing)
+                    messages.success(request, "İlan favorilere eklendi.")
+                else:
+                    Favorite.objects.filter(user=request.user, listing=listing).delete()
+                    messages.success(request, "Favorilerden çıkarıldı.")
+                return redirect('listing_detail', pk=pk)
+            else:
+                messages.warning(request, "Favorilere eklemek için giriş yapmalısınız.")
 
-    context = {'listing': listing}
-    return render(request, 'listing/listing_detail.html', context)
+    return render(request, 'listing/listing_detail.html', {
+        'listing': listing,
+        'is_favorited': is_favorited
+    })
 
 
 from django.shortcuts import render
@@ -92,5 +110,10 @@ def home(request):
         'listings': listings
     }
     return render(request, 'home.html', context)
+
+@login_required
+def favorites_list(request):
+    favorites = Favorite.objects.filter(user=request.user).select_related('listing')
+    return render(request, 'favorites_list.html', {'favorites': favorites})
 
 
