@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>İlgilenilen İlanlar</h2>
+
+  {% if interested_listings %}
+    <div class="row">
+      {% for item in interested_listings %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if item.listing.image and item.listing.image.name %}
+              <img src="{{ item.listing.image.url }}" class="card-img-top" alt="{{ item.listing.title }}">
+            {% else %}
+              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ item.listing.title }}</h5>
+              <p class="card-text">{{ item.listing.related_course }}</p>
+              <a href="{% url 'listing_detail' item.listing.id %}" class="btn btn-primary btn-sm">Detay</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Henüz ilgilenilen ilan yok.</p>
+  {% endif %}
+</div>
+{% endblock %}

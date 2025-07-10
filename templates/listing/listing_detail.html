@@ -53,27 +53,17 @@
         <p><strong>İlan Sahibi:</strong> {{ listing.user.username }}</p>
         <p><small>Oluşturulma Tarihi: {{ listing.created_at|date:"d/m/Y H:i" }}</small></p>
 
-        <!-- İlgileniyorum butonu -->
-        {% if listing.donation_type == 'free' %}
-          <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success mt-3">İlgileniyorum</button>
-          </form>
-        {% endif %}
-
-        <!-- Favorilere ekle/çıkar -->
+        <!-- İlgileniyorum butonu (sadece giriş yapmış kullanıcılar için) -->
         {% if user.is_authenticated %}
-          <form method="post" class="mt-2">
+          <form method="post" class="d-inline">
             {% csrf_token %}
-            <button type="submit" name="favorite"
-              class="btn {% if is_favorited %}btn-outline-danger{% else %}btn-outline-primary{% endif %}">
-              {% if is_favorited %}Favorilerden Çıkar{% else %}Favorilere Ekle{% endif %}
+            <button type="submit" name="interested"
+              class="btn {% if is_interested %}btn-success{% else %}btn-outline-success{% endif %} mt-3">
+              {% if is_interested %}İlgileniyorum{% else %}İlgileniyorum{% endif %}
             </button>
           </form>
         {% else %}
-          <p class="text-muted mt-2">
-            Favorilere eklemek için <a href="{% url 'login' %}">giriş yapın</a>.
-          </p>
+          <p class="text-muted mt-2">İlgilenmek için <a href="{% url 'login' %}">giriş yapın</a>.</p>
         {% endif %}
       </div>
     </div>

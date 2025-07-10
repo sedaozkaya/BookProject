@@ -6,7 +6,7 @@ from django import forms
 from django.shortcuts import render, redirect
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
-from .models import Listing, Favorite
+from .models import Listing, Favorite, Interested
 
 
 
@@ -54,25 +54,41 @@ def create_listing(request):
 
 
 
+@login_required
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
 
     is_favorited = False
+    is_interested = False
+
     if request.user.is_authenticated:
         is_favorited = Favorite.objects.filter(user=request.user, listing=listing).exists()
+        is_interested = Interested.objects.filter(user=request.user, listing=listing).exists()
 
     if request.method == 'POST':
         if 'favorite' in request.POST:
-            if request.user.is_authenticated:
-                if not is_favorited:
-                    Favorite.objects.create(user=request.user, listing=listing)
-                    messages.success(request, "İlan favorilere eklendi.")
-                else:
-                    Favorite.objects.filter(user=request.user, listing=listing).delete()
-                    messages.success(request, "Favorilerden çıkarıldı.")
-                return redirect('listing_detail', pk=pk)
+            if not is_favorited:
+                Favorite.objects.create(user=request.user, listing=listing)
+                messages.success(request, "İlan favorilere eklendi.")
             else:
-                messages.warning(request, "Favorilere eklemek için giriş yapmalısınız.")
+                Favorite.objects.filter(user=request.user, listing=listing).delete()
+                messages.success(request, "Favorilerden çıkarıldı.")
+            return redirect('listing_detail', pk=pk)
+
+        elif 'interested' in request.POST:
+            if not is_interested:
+                Interested.objects.create(user=request.user, listing=listing)
+                messages.success(request, "İlgilenme bildirildi.")
+            else:
+                Interested.objects.filter(user=request.user, listing=listing).delete()
+                messages.success(request, "İlgilenme iptal edildi.")
+            return redirect('listing_detail', pk=pk)
+
+    return render(request, 'listing/listing_detail.html', {
+        'listing': listing,
+        'is_favorited': is_favorited,
+        'is_interested': is_interested,
+    })
 
     return render(request, 'listing/listing_detail.html', {
         'listing': listing,
@@ -115,5 +131,11 @@ def home(request):
 def favorites_list(request):
     favorites = Favorite.objects.filter(user=request.user).select_related('listing')
     return render(request, 'favorites_list.html', {'favorites': favorites})
+
+@login_required
+def interested_list(request):
+    interested_listings = Interested.objects.filter(user=request.user).select_related('listing')
+    return render(request, 'interested_list.html', {'interested_listings': interested_listings})
+
 
 

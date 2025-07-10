@@ -3,6 +3,8 @@
     <div class="ms-auto">
         {% if user.is_authenticated %}
             <a href="{% url 'favorites_list' %}" class="btn btn-outline-light btn-sm me-2">Favorilerim</a>
+            <a href="{% url 'interested_list' %}" class="btn btn-outline-light btn-sm me-2">İlgilenilenler</a>
+
             <span class="navbar-text me-3">Merhaba, {{ user.username }}</span>
             <form action="{% url 'logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
