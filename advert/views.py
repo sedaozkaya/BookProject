@@ -136,6 +136,9 @@ def favorites_list(request):
 def interested_list(request):
     interested_listings = Interested.objects.filter(user=request.user).select_related('listing')
     return render(request, 'interested_list.html', {'interested_listings': interested_listings})
+@login_required
+def profile_view(request):
+    return render(request, 'profile.html')
 
 
 
