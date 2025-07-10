@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Benim İlanlarım</h2>
+
+  {% if listings %}
+    <div class="row">
+      {% for listing in listings %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            {% if listing.image and listing.image.name %}
+              <img src="{{ listing.image.url }}" class="card-img-top" alt="{{ listing.title }}">
+            {% else %}
+              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ listing.title }}</h5>
+              <p class="card-text">{{ listing.related_course }}</p>
+
+              <div class="d-flex justify-content-between">
+                <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-primary">Detay</a>
+                <a href="{% url 'edit_listing' listing.id %}" class="btn btn-sm btn-warning">Düzenle</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Henüz bir ilanınız yok. <a href="{% url 'create_listing' %}">Şimdi oluştur</a>.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -139,6 +139,24 @@ def interested_list(request):
 @login_required
 def profile_view(request):
     return render(request, 'profile.html')
+@login_required
+def my_listings(request):
+    listings = Listing.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'my_listings.html', {'listings': listings})
+
+@login_required
+def edit_listing(request, pk):
+    listing = get_object_or_404(Listing, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        form = ListingForm(request.POST, request.FILES, instance=listing)
+        if form.is_valid():
+            form.save()
+            return redirect('my_listings')  # düzenlendikten sonra ilanlarım sayfasına dön
+    else:
+        form = ListingForm(instance=listing)
+
+    return render(request, 'edit_listing.html', {'form': form, 'listing': listing})
 
 
 
