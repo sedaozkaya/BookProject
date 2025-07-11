@@ -1,0 +1,74 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
+from django.shortcuts import render, redirect
+
+from listings.models import Listing
+from user import forms
+from user.forms import UserUpdateForm
+
+
+class CustomUserCreationForm(UserCreationForm):
+
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            return redirect('login')
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'user/register.html', {'form': form})
+
+
+@login_required
+def profile_view(request):
+    return render(request, 'user/profile.html')
+@login_required
+def my_listings(request):
+    listings = Listing.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'user/my_listings.html', {'listings': listings})
+
+
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profiliniz güncellendi.')
+            return redirect('profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'user/edit_profile.html', {'form': form})
+
+def top_donors(request):
+    donors = User.objects.annotate(
+        free_count=Count('listing', filter=Q(listing__donation_type='free'))
+    ).filter(free_count__gt=0).order_by('-free_count')[:10]
+
+    return render(request, 'user/top_donors.html', {'donors': donors})
+
+def toggle_dark_mode(request):
+    response = redirect(request.META.get('HTTP_REFERER', 'home'))
+    current = request.COOKIES.get('dark_mode', 'false')
+    response.set_cookie('dark_mode', 'false' if current == 'true' else 'true', max_age=60*60*24*365)
+    return response
