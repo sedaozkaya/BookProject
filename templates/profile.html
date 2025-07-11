@@ -13,8 +13,8 @@
       <p><strong>Kayıt Tarihi:</strong> {{ user.date_joined|date:"d/m/Y H:i" }}</p>
 
       <hr>
-      <!-- İsteğe bağlı geliştirme bağlantısı -->
-      <a href="#" class="btn btn-outline-secondary btn-sm disabled">Profil Bilgilerini Güncelle (Yapım Aşamasında)</a>
+      <!-- Güncelleme bağlantısı -->
+      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm">Profil Bilgilerini Güncelle</a>
     </div>
   </div>
 </div>

@@ -22,6 +22,8 @@
               <div class="d-flex justify-content-between">
                 <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-primary">Detay</a>
                 <a href="{% url 'edit_listing' listing.id %}" class="btn btn-sm btn-warning">Düzenle</a>
+                  <a href="{% url 'delete_listing' listing.id %}" class="btn btn-sm btn-danger">Sil</a>
+
               </div>
             </div>
           </div>

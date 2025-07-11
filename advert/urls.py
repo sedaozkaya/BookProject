@@ -17,6 +17,11 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('my-listings/', views.my_listings, name='my_listings'),
     path('listing/<int:pk>/edit/', views.edit_listing, name='edit_listing'),
+    path('listing/<int:pk>/delete/', views.delete_listing, name='delete_listing'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+
+
+
 
 
 

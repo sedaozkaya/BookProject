@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from .models import Listing, Favorite, Interested
+from .forms import UserUpdateForm
+
 
 
 
@@ -90,10 +92,7 @@ def listing_detail(request, pk):
         'is_interested': is_interested,
     })
 
-    return render(request, 'listing/listing_detail.html', {
-        'listing': listing,
-        'is_favorited': is_favorited
-    })
+
 
 
 from django.shortcuts import render
@@ -157,6 +156,33 @@ def edit_listing(request, pk):
         form = ListingForm(instance=listing)
 
     return render(request, 'edit_listing.html', {'form': form, 'listing': listing})
+
+
+
+@login_required
+def delete_listing(request, pk):
+    listing = get_object_or_404(Listing, pk=pk, user=request.user)
+
+    if request.method == 'POST':
+        listing.delete()
+        return redirect('my_listings')
+
+    return render(request, 'confirm_delete.html', {'listing': listing})
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profiliniz güncellendi.')
+            return redirect('profile')
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'edit_profile.html', {'form': form})
+
 
 
 
