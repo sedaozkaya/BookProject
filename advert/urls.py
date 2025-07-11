@@ -20,6 +20,12 @@ urlpatterns = [
     path('listing/<int:pk>/delete/', views.delete_listing, name='delete_listing'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('top-donors/', views.top_donors, name='top_donors'),
+    path('toggle-dark-mode/', views.toggle_dark_mode, name='toggle_dark_mode'),
+    path('listing/<int:listing_id>/message/', views.start_conversation, name='start_conversation'),
+    path('conversations/', views.conversation_list, name='conversation_list'),
+    path('conversations/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
+    path('messages/', views.my_conversations, name='my_conversations'),
+    path('conversation/<int:conversation_id>/', views.conversation_detail, name='conversation_detail'),
 
 
 

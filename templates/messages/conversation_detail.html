@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Konuşma: {{ conversation.listing.title }}</h2>
+    <p><strong>Satıcı:</strong> {{ conversation.seller.username }} | <strong>Alıcı:</strong> {{ conversation.buyer.username }}</p>
+
+    <div class="card mb-3" style="max-height: 400px; overflow-y: auto;">
+        <div class="card-body">
+            {% for message in messages %}
+                <div class="mb-2 {% if message.sender == user %}text-end{% else %}text-start{% endif %}">
+                    <span class="badge {% if message.sender == user %}bg-primary{% else %}bg-secondary{% endif %}">
+                        {{ message.sender.username }}
+                    </span>
+                    <p class="mb-1">{{ message.text|linebreaksbr }}</p>
+                    <small class="text-muted">{{ message.created_at|date:"d/m/Y H:i" }}</small>
+                </div>
+                <hr>
+            {% empty %}
+                <p>Henüz mesaj yok.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.text }}
+        <button type="submit" class="btn btn-primary mt-2">Gönder</button>
+    </form>
+</div>
+{% endblock %}

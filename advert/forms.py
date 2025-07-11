@@ -1,5 +1,5 @@
 from django import forms
-from .models import Listing, User
+from .models import Listing, User,Message
 
 class ListingForm(forms.ModelForm):
     class Meta:
@@ -48,3 +48,11 @@ class UserUpdateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
             }
 
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Mesajınızı yazın...'}),
+        }

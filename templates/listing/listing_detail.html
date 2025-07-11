@@ -59,9 +59,14 @@
             {% csrf_token %}
             <button type="submit" name="interested"
               class="btn {% if is_interested %}btn-success{% else %}btn-outline-success{% endif %} mt-3">
-              {% if is_interested %}İlgileniyorum{% else %}İlgileniyorum{% endif %}
+              {% if is_interested %}İlgileniyorum{% else %}İlgilen{% endif %}
             </button>
           </form>
+
+          <!-- Satıcı ile mesajlaşma (kullanıcı ilan sahibi değilse) -->
+          {% if user != listing.user %}
+            <a href="{% url 'start_conversation' listing.id %}" class="btn btn-info mt-3 me-2">Satıcı ile Mesajlaş</a>
+          {% endif %}
 
           <!-- Favori butonu -->
           <form method="post" class="d-inline">
@@ -72,7 +77,7 @@
             </button>
           </form>
         {% else %}
-          <p class="text-muted mt-2">İlgilenmek veya favoriye eklemek için <a href="{% url 'login' %}">giriş yapın</a>.</p>
+          <p class="text-muted mt-2">İlgilenmek, favoriye eklemek veya mesajlaşmak için <a href="{% url 'login' %}">giriş yapın</a>.</p>
         {% endif %}
       </div>
     </div>

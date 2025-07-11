@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Konuşmalarım</h2>
+  {% if conversations %}
+    <ul class="list-group">
+      {% for conv in conversations %}
+        <li class="list-group-item">
+          <a href="{% url 'conversation_detail' conv.id %}">
+            {{ conv.listing.title }} — 
+            {% if conv.buyer == user %}
+              Satıcı: {{ conv.seller.username }}
+            {% else %}
+              Alıcı: {{ conv.buyer.username }}
+            {% endif %}
+            <span class="text-muted float-end">{{ conv.created_at|date:"d/m/Y H:i" }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Henüz konuşma yok.</p>
+  {% endif %}
+</div>
+{% endblock %}
