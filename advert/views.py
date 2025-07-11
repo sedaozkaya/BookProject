@@ -1,13 +1,21 @@
 from django.contrib import messages
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from django.shortcuts import render, redirect
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from .models import Listing, Favorite, Interested
 from .forms import UserUpdateForm
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
+from .models import Listing
+
+
 
 
 
@@ -183,6 +191,12 @@ def edit_profile(request):
 
     return render(request, 'edit_profile.html', {'form': form})
 
+def top_donors(request):
+    donors = User.objects.annotate(
+        free_count=Count('listing', filter=Q(listing__donation_type='free'))
+    ).filter(free_count__gt=0).order_by('-free_count')[:10]
+
+    return render(request, 'top_donors.html', {'donors': donors})
 
 
 

@@ -19,6 +19,7 @@ urlpatterns = [
     path('listing/<int:pk>/edit/', views.edit_listing, name='edit_listing'),
     path('listing/<int:pk>/delete/', views.delete_listing, name='delete_listing'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('top-donors/', views.top_donors, name='top_donors'),
 
 
 

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-4">En Çok Bağış Yapanlar</h3>
+
+  {% if donors %}
+    <ul class="list-group">
+      {% for user in donors %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ forloop.counter }}. {{ user.username }}
+          <span class="badge bg-success rounded-pill">{{ user.free_count }} bağış</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Henüz bağış yapan kullanıcı bulunamadı.</p>
+  {% endif %}
+</div>
+{% endblock %}
