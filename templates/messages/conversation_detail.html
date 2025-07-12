@@ -4,20 +4,22 @@
   <h3>İlan: {{ conversation.listing.title }}</h3>
 
   <div class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
-    {% for message in messages %}
-      <div class="mb-2 {% if message.sender == user %}text-end{% endif %}">
-        <strong>{{ message.sender.username }}</strong><br>
-        {{ message.text }}<br>
-        <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
-      </div>
-    {% empty %}
+    {% if chat_messages %}
+      {% for message in chat_messages %}
+        <div class="mb-2 {% if message.sender == user %}text-end{% endif %}">
+          <strong>{{ message.sender.username }}</strong><br>
+          {{ message.text }}<br>
+          <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+        </div>
+      {% endfor %}
+    {% else %}
       <p class="text-muted">Henüz mesaj yok.</p>
-    {% endfor %}
+    {% endif %}
   </div>
 
   <form method="post">
     {% csrf_token %}
-    <textarea name="text" class="form-control" rows="3" placeholder="Mesajınızı yazın..." required></textarea>
+    {{ form.text }}
     <button type="submit" class="btn btn-primary mt-2">Gönder</button>
   </form>
 </div>
