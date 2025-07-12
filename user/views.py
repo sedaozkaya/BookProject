@@ -76,12 +76,12 @@ def top_donors(request):
     one_week_ago = now - timedelta(days=7)
     one_month_ago = now - timedelta(days=30)
 
-    # Tüm zamanların donörleri
+
     all_time_donors = User.objects.annotate(
         free_count=Count('listing', filter=Q(listing__donation_type='free'))
     ).filter(free_count__gt=0).order_by('-free_count')[:10]
 
-    # Haftalık donörler
+
     weekly_donors = User.objects.annotate(
         free_count=Count('listing', filter=Q(
             listing__donation_type='free',
@@ -89,7 +89,7 @@ def top_donors(request):
         ))
     ).filter(free_count__gt=0).order_by('-free_count')[:10]
 
-    # Aylık donörler
+
     monthly_donors = User.objects.annotate(
         free_count=Count('listing', filter=Q(
             listing__donation_type='free',

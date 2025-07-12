@@ -34,15 +34,16 @@ class BootstrapFormMixin:
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-class PasswordResetCodeForm(BootstrapFormMixin, forms.Form):
-    email = forms.EmailField(label="E-posta")
-    code = forms.CharField(max_length=6, label="Doğrulama Kodu")
+
 
 class BootstrapFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.visible_fields():
             field.field.widget.attrs['class'] = 'form-control'
+
+
+
 
 class SetNewPasswordForm(BootstrapFormMixin, forms.Form):
     new_password = forms.CharField(widget=forms.PasswordInput, label="Yeni Şifre")

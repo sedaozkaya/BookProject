@@ -2,30 +2,77 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2>Favorilerim</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+      <i class="fas fa-star text-yellow-400 mr-3"></i> Favorilerim
+    </h1>
+    {% if favorites %}
+      <span class="badge badge-primary text-lg">{{ favorites.count }} favori</span>
+    {% endif %}
+  </div>
 
   {% if favorites %}
-    <div class="row">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {% for fav in favorites %}
-        <div class="col-md-4 mb-4">
-          <div class="card h-100">
-            {% if fav.listing.image and fav.listing.image.name %}
-              <img src="{{ fav.listing.image.url }}" class="card-img-top" alt="{{ fav.listing.title }}">
-            {% else %}
-              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ fav.listing.title }}</h5>
-              <p class="card-text">{{ fav.listing.related_course }}</p>
-              <a href="{% url 'listing_detail' fav.listing.id %}" class="btn btn-primary btn-sm">Detay</a>
-            </div>
+      <div class="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 rounded-lg border border-gray-100 relative">
+        
+       
+        <form action="{% url 'toggle_favorite' fav.listing.id %}" method="POST" class="absolute top-2 right-2 z-10">
+          {% csrf_token %}
+          <button type="submit" title="Favorilerden çıkar"
+                  class="text-yellow-400 hover:text-yellow-600 bg-white rounded-full p-2 shadow-sm">
+            <i class="fas fa-star text-lg"></i>
+          </button>
+        </form>
+
+        {% if fav.listing.image and fav.listing.image.name %}
+          <figure class="relative h-48 overflow-hidden rounded-t-lg">
+            <img src="{{ fav.listing.image.url }}" alt="{{ fav.listing.title }}" 
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+          </figure>
+        {% else %}
+          <figure class="relative h-48 bg-gray-100 rounded-t-lg flex items-center justify-center">
+            <i class="fas fa-book text-4xl text-gray-400"></i>
+          </figure>
+        {% endif %}
+        
+        <div class="p-4">
+          <h3 class="text-lg font-semibold">{{ fav.listing.title }}</h3>
+
+          <div class="flex items-center text-sm text-gray-500 mt-1">
+            <i class="fas fa-bookmark mr-1"></i>
+            <span>{{ fav.listing.related_course|default:"Genel" }}</span>
+          </div>
+
+          <div class="flex items-center text-sm text-gray-500 mt-1">
+            <i class="fas fa-{% if fav.listing.donation_type == 'free' %}gift{% else %}money-bill-wave{% endif %} mr-1"></i>
+            <span>
+              {% if fav.listing.donation_type == 'free' %}
+                Ücretsiz Bağış
+              {% else %}
+                {{ fav.listing.price }} ₺
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="mt-4">
+            <a href="{% url 'listing_detail' fav.listing.id %}" class="btn btn-primary btn-sm w-full">
+              <i class="fas fa-eye mr-2"></i> İncele
+            </a>
           </div>
         </div>
+      </div>
       {% endfor %}
     </div>
   {% else %}
-    <p>Henüz hiç favori ilanınız yok.</p>
+    <div class="text-center py-12 bg-white rounded-lg shadow-sm">
+      <i class="fas fa-star text-4xl text-gray-300 mb-4"></i>
+      <h3 class="text-lg font-medium text-gray-500">Henüz favori ilanınız yok</h3>
+      <a href="{% url 'home' %}" class="btn btn-primary mt-4">
+        <i class="fas fa-search mr-2"></i> İlanlara Göz At
+      </a>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

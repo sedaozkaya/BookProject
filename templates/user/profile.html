@@ -2,25 +2,53 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="card shadow-sm">
-    <div class="card-header bg-primary text-white">
-      <h4 class="mb-0">Profilim</h4>
+<div class="max-w-3xl mx-auto">
+  <div class="bg-gradient-to-r from-primary to-indigo-600 text-white rounded-t-xl p-6 shadow-lg">
+    <div class="flex items-center space-x-4">
+      <div class="w-16 h-16 rounded-full bg-white text-primary flex items-center justify-center text-2xl font-bold">
+        {{ user.username|first|upper }}
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+        <p class="text-sm opacity-90">Üye since {{ user.date_joined|date:"d.m.Y" }}</p>
+      </div>
     </div>
-    <div class="card-body">
-      <p><strong>Kullanıcı Adı:</strong> {{ user.username }}</p>
-      <p><strong>E-posta:</strong> {{ user.email }}</p>
-      <p><strong>Kayıt Tarihi:</strong> {{ user.date_joined|date:"d/m/Y H:i" }}</p>
+  </div>
 
-      <hr>
+  <div class="bg-white rounded-b-xl shadow-md divide-y divide-gray-100">
+    <div class="p-6 space-y-4">
+      <div class="flex items-center">
+        <i class="fas fa-user text-gray-400 w-6 mr-3"></i>
+        <div>
+          <p class="text-sm text-gray-500">Kullanıcı Adı</p>
+          <p class="font-medium">{{ user.username }}</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center">
+        <i class="fas fa-envelope text-gray-400 w-6 mr-3"></i>
+        <div>
+          <p class="text-sm text-gray-500">E-posta</p>
+          <p class="font-medium">{{ user.email }}</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center">
+        <i class="fas fa-calendar-alt text-gray-400 w-6 mr-3"></i>
+        <div>
+          <p class="text-sm text-gray-500">Kayıt Tarihi</p>
+          <p class="font-medium">{{ user.date_joined|date:"d.m.Y H:i" }}</p>
+        </div>
+      </div>
+    </div>
 
-      <!-- Güncelleme bağlantısı -->
-      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm">Profil Bilgilerini Güncelle</a>
-
-      <!-- Hesap silme bağlantısı -->
-      <a href="{% url 'delete_account' %}" class="btn btn-outline-danger btn-sm float-end"
+    <div class="p-4 flex justify-between">
+      <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+        <i class="fas fa-edit mr-2"></i> Profili Düzenle
+      </a>
+      <a href="{% url 'delete_account' %}" class="btn btn-outline btn-error"
          onclick="return confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
-        Hesabımı Sil
+        <i class="fas fa-trash-alt mr-2"></i> Hesabı Sil
       </a>
     </div>
   </div>

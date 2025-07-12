@@ -1,14 +1,214 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2>İlanı Düzenle</h2>
+<div class="max-w-4xl mx-auto my-8">
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    
+    
+    <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6">
+      <h1 class="text-2xl font-bold flex items-center">
+        <i class="fas fa-edit mr-3"></i> İlanı Düzenle
+      </h1>
+      <p class="text-sm opacity-90 mt-1">{{ listing.title }}</p>
+    </div>
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Kaydet</button>
-    <a href="{% url 'my_listings' %}" class="btn btn-secondary">Vazgeç</a>
-  </form>
+    <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+      {% csrf_token %}
+      
+    
+      {% if form.errors %}
+      <div class="alert alert-error mb-6">
+        <div>
+          <i class="fas fa-exclamation-circle"></i>
+          <span>Formda hatalar bulunuyor:</span>
+          <ul class="mt-2">
+            {% for field, errors in form.errors.items %}
+              {% for error in errors %}
+                <li>- {{ field }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+
+ 
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control">
+          <label class="label" for="{{ form.title.id_for_label }}">
+            <span class="label-text">{{ form.title.label }}</span>
+          </label>
+          {{ form.title|add_class:"input input-bordered w-full focus:ring-2 focus:ring-primary" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.listing_type.id_for_label }}">
+            <span class="label-text">{{ form.listing_type.label }}</span>
+          </label>
+          {{ form.listing_type|add_class:"select select-bordered w-full" }}
+        </div>
+      </div>
+
+   
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="form-control">
+          <label class="label" for="{{ form.level.id_for_label }}">
+            <span class="label-text">{{ form.level.label }}</span>
+          </label>
+          {{ form.level|add_class:"select select-bordered w-full" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.donation_type.id_for_label }}">
+            <span class="label-text">{{ form.donation_type.label }}</span>
+          </label>
+          {{ form.donation_type|add_class:"select select-bordered w-full" }}
+        </div>
+      </div>
+
+ 
+      <div class="form-control {% if form.instance.donation_type != 'paid' %}hidden{% endif %}" id="price-field">
+        <label class="label" for="{{ form.price.id_for_label }}">
+          <span class="label-text">{{ form.price.label }}</span>
+        </label>
+        <div class="relative">
+          {{ form.price|add_class:"input input-bordered w-full pl-8" }}
+          <span class="absolute left-3 top-3 text-gray-500">₺</span>
+        </div>
+      </div>
+
+     
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 {% if form.instance.listing_type != 'book' %}hidden{% endif %}" id="book-fields">
+        <div class="form-control">
+          <label class="label" for="{{ form.publish_year.id_for_label }}">
+            <span class="label-text">{{ form.publish_year.label }}</span>
+          </label>
+          {{ form.publish_year|add_class:"input input-bordered w-full" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.publisher.id_for_label }}">
+            <span class="label-text">{{ form.publisher.label }}</span>
+          </label>
+          {{ form.publisher|add_class:"input input-bordered w-full" }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 {% if form.instance.listing_type != 'note' %}hidden{% endif %}" id="note-fields">
+        <div class="form-control">
+          <label class="label" for="{{ form.school_name.id_for_label }}">
+            <span class="label-text">{{ form.school_name.label }}</span>
+          </label>
+          {{ form.school_name|add_class:"input input-bordered w-full" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.valid_year.id_for_label }}">
+            <span class="label-text">{{ form.valid_year.label }}</span>
+          </label>
+          {{ form.valid_year|add_class:"input input-bordered w-full" }}
+        </div>
+      </div>
+
+    
+      <div class="grid grid-cols-1 gap-6">
+        <div class="form-control">
+          <label class="label" for="{{ form.related_course.id_for_label }}">
+            <span class="label-text">{{ form.related_course.label }}</span>
+          </label>
+          {{ form.related_course|add_class:"input input-bordered w-full" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.page_count.id_for_label }}">
+            <span class="label-text">{{ form.page_count.label }}</span>
+          </label>
+          {{ form.page_count|add_class:"input input-bordered w-full" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.description.id_for_label }}">
+            <span class="label-text">{{ form.description.label }}</span>
+          </label>
+          {{ form.description|add_class:"textarea textarea-bordered w-full h-32" }}
+        </div>
+
+        <div class="form-control">
+          <label class="label" for="{{ form.image.id_for_label }}">
+            <span class="label-text">{{ form.image.label }}</span>
+          </label>
+          <div class="flex items-center gap-4">
+            {% if form.instance.image %}
+              <img src="{{ form.instance.image.url }}" alt="Mevcut resim" class="w-20 h-20 object-cover rounded-lg">
+            {% endif %}
+            <div class="file-input flex-1">
+              {{ form.image|add_class:"file-input file-input-bordered w-full" }}
+            </div>
+          </div>
+          <p class="text-sm text-gray-500 mt-1">JPEG veya PNG formatında yükleyin</p>
+        </div>
+      </div>
+
+      
+      <div class="flex justify-between pt-6 border-t">
+        <div>
+          <a href="{% url 'delete_listing' listing.id %}" class="btn btn-outline btn-error"
+             onclick="return confirm('Bu ilanı silmek istediğinizden emin misiniz?')">
+            <i class="fas fa-trash mr-2"></i> İlanı Sil
+          </a>
+        </div>
+        <div class="flex gap-4">
+          <a href="{% url 'my_listings' %}" class="btn btn-outline">Vazgeç</a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save mr-2"></i> Değişiklikleri Kaydet
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const listingType = document.getElementById('id_listing_type');
+  const donationType = document.getElementById('id_donation_type');
+  const priceField = document.getElementById('price-field');
+  const bookFields = document.getElementById('book-fields');
+  const noteFields = document.getElementById('note-fields');
+
+  function updateFields() {
+
+    if (donationType.value === 'paid') {
+      priceField.classList.remove('hidden');
+    } else {
+      priceField.classList.add('hidden');
+    }
+
+    if (listingType.value === 'book') {
+      bookFields.classList.remove('hidden');
+      noteFields.classList.add('hidden');
+    } else if (listingType.value === 'note') {
+      bookFields.classList.add('hidden');
+      noteFields.classList.remove('hidden');
+    } else {
+      bookFields.classList.add('hidden');
+      noteFields.classList.add('hidden');
+    }
+  }
+
+ 
+  listingType.addEventListener('change', updateFields);
+  donationType.addEventListener('change', updateFields);
+});
+</script>
+
+<style>
+.file-input::file-selector-button {
+  @apply bg-gray-100 text-gray-700 border-r border-gray-300 px-4 py-2 mr-2;
+}
+.file-input:hover::file-selector-button {
+  @apply bg-gray-200;
+}
+</style>
 {% endblock %}

@@ -1,0 +1,36 @@
+<aside class="w-64 bg-white shadow-md hidden md:block">
+  <div class="p-4 border-b border-gray-200">
+    <h3 class="font-bold text-lg text-primary">Öğrenci Paneli</h3>
+  </div>
+  <nav class="p-4 space-y-2">
+    <a href="{% url 'home' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-home mr-3 text-secondary"></i>
+      <span>Anasayfa</span>
+    </a>
+    <a href="{% url 'top_donors' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-trophy mr-3 text-secondary"></i>
+      <span>Bağışçılar</span>
+    </a>
+    <a href="{% url 'favorites_list' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-heart mr-3 text-secondary"></i>
+      <span>Favorilerim</span>
+    </a>
+    <a href="{% url 'interested_list' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-bookmark mr-3 text-secondary"></i>
+      <span>İlgilenilenler</span>
+    </a>
+    <a href="{% url 'my_listings' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-list mr-3 text-secondary"></i>
+      <span>İlanlarım</span>
+    </a>
+    <a href="{% url 'conversation_list' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-comments mr-3 text-secondary"></i>
+      <span>Mesajlar</span>
+      <span class="ml-auto bg-primary text-white text-xs px-2 py-1 rounded-full">3</span>
+    </a>
+    <a href="{% url 'profile' %}" class="flex items-center p-2 rounded-lg hover:bg-gray-100 transition">
+      <i class="fas fa-user mr-3 text-secondary"></i>
+      <span>Profil</span>
+    </a>
+  </nav>
+</aside>

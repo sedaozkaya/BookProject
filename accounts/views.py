@@ -24,7 +24,7 @@ def password_reset_request_view(request):
                     fail_silently=False,
                 )
                 messages.success(request, "E-posta adresinize bir kod gönderildi.")
-                # Kod girme sayfasına yönlendirme yapılabilir
+
                 return redirect('password_reset_verify')
             except User.DoesNotExist:
                 messages.error(request, "Bu e-posta adresine ait bir kullanıcı bulunamadı.")
@@ -33,7 +33,7 @@ def password_reset_request_view(request):
     return render(request, 'accounts/password_reset_request.html', {'form': form})
 
 
-# accounts/views.py (ek olarak)
+
 
 from django.utils import timezone
 from datetime import timedelta
@@ -49,10 +49,10 @@ def password_reset_verify_view(request):
                 reset_entry = PasswordResetCode.objects.filter(
                     user=user,
                     code=code,
-                    created_at__gte=timezone.now() - timedelta(minutes=15)  # 15 dk geçerlilik süresi
+                    created_at__gte=timezone.now() - timedelta(minutes=15)
                 ).latest('created_at')
 
-                # Kod doğruysa, session'a kullanıcıyı geçici olarak kaydedelim
+
                 request.session['password_reset_user_id'] = user.id
                 return redirect('password_reset_confirm')
 

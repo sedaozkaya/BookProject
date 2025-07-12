@@ -6,25 +6,23 @@ from listings.forms import ListingForm
 from listings.models import Favorite, Interested, Listing
 
 
-@login_required
 def create_listing(request):
     if request.method == 'POST':
-
         form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.user = request.user
             listing.save()
-            return redirect('home')
+            messages.success(request, 'İlan başarıyla oluşturuldu!')
+            return redirect('listing_detail', pk=listing.pk)
+        else:
+
+            messages.error(request, 'Lütfen formdaki hataları düzeltin')
+            print(form.errors)
     else:
         form = ListingForm()
+
     return render(request, 'listing/create_listing.html', {'form': form})
-
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-
-from listings.models import Listing, Favorite, Interested
 
 @login_required
 def listing_detail(request, pk):
@@ -56,16 +54,11 @@ def listing_detail(request, pk):
                 messages.success(request, "İlgilenme iptal edildi.")
             return redirect('listing_detail', pk=pk)
 
-
-    interested_users = Interested.objects.filter(listing=listing)
-
     return render(request, 'listing/listing_detail.html', {
         'listing': listing,
         'is_favorited': is_favorited,
         'is_interested': is_interested,
-        'interested_users': interested_users
     })
-
 
 @login_required
 def favorites_list(request):
@@ -85,7 +78,7 @@ def edit_listing(request, pk):
         form = ListingForm(request.POST, request.FILES, instance=listing)
         if form.is_valid():
             form.save()
-            return redirect('my_listings')  # düzenlendikten sonra ilanlarım sayfasına dön
+            return redirect('my_listings')
     else:
         form = ListingForm(instance=listing)
 
@@ -130,4 +123,54 @@ def home(request):
         'listings': listings
     }
     return render(request, 'user/home.html', context)
+
+@login_required
+def toggle_favorite(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+
+    try:
+        favorite, created = Favorite.objects.get_or_create(
+            user=request.user,
+            listing=listing
+        )
+
+        if not created:
+            favorite.delete()
+            messages.success(request, 'İlan favorilerinizden çıkarıldı.')
+        else:
+            messages.success(request, 'İlan favorilerinize eklendi.')
+
+    except Exception as e:
+        messages.error(request, f'Bir hata oluştu: {str(e)}')
+
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+
+@login_required
+def toggle_interest(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+
+    try:
+        interest, created = Interested.objects.get_or_create(
+            user=request.user,
+            listing=listing
+        )
+
+        if not created:
+            interest.delete()
+            messages.success(request, 'İlan ilgi listenizden çıkarıldı.')
+        else:
+            messages.success(request, 'İlan ilgi listenize eklendi.')
+
+    except Exception as e:
+        messages.error(request, f'Bir hata oluştu: {str(e)}')
+
+    return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+@login_required
+def my_listings(request):
+    listings = Listing.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'user/my_listings.html', {'listings': listings})
+
+
 

@@ -51,7 +51,7 @@ def conversation_detail(request, conversation_id):
         'chat_messages': chat_messages,
         'form': form,
     }
-    return render(request, 'messages/conversation_detail.html', context)  # ✅ Parantez kapandı
+    return render(request, 'messages/conversation_detail.html', context)
 
 @login_required
 def conversation_list(request):

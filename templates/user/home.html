@@ -2,97 +2,133 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
-  <h1>Hoşgeldiniz!</h1>
+<div class="bg-gradient-to-r from-primary to-indigo-600 rounded-xl p-6 text-white mb-8 shadow-lg">
+  <h1 class="text-3xl font-bold mb-2">Hoşgeldiniz! <span class="text-secondary">👋</span></h1>
+  <p class="mb-4">Öğrenciler için ücretsiz kitap ve ders notu platformu</p>
 
   {% if user.is_authenticated %}
-    <a href="{% url 'create_listing' %}" class="btn btn-success mb-3">İlan Oluştur</a>
+    <a href="{% url 'create_listing' %}" class="btn btn-success hover:scale-105 transition-transform">
+      <i class="fas fa-plus mr-2"></i> Yeni İlan Oluştur
+    </a>
   {% else %}
-    <p>İlan oluşturmak için <a href="{% url 'login' %}">giriş yapmalısınız</a>.</p>
+    <div class="flex items-center space-x-4">
+      <p>İlan oluşturmak için giriş yapmalısınız</p>
+      <a href="{% url 'login' %}" class="btn btn-outline btn-sm text-white hover:bg-white hover:text-primary">
+        Giriş Yap
+      </a>
+    </div>
   {% endif %}
-<form method="get" class="row g-2 mb-4">
-  <div class="col-md-2">
-    <select name="level" class="form-select">
-      <option value="">Seviye</option>
-      <option value="primary" {% if request.GET.level == "primary" %}selected{% endif %}>İlkokul</option>
-      <option value="middle" {% if request.GET.level == "middle" %}selected{% endif %}>Ortaokul</option>
-      <option value="high" {% if request.GET.level == "high" %}selected{% endif %}>Lise</option>
-      <option value="university" {% if request.GET.level == "university" %}selected{% endif %}>Üniversite</option>
-      <option value="general" {% if request.GET.level == "general" %}selected{% endif %}>Genel</option>
+</div>
 
-    </select>
-  </div>
-  <div class="col-md-2">
-    <select name="listing_type" class="form-select">
-      <option value="">Tür</option>
-      <option value="book" {% if request.GET.listing_type == "book" %}selected{% endif %}>Kitap</option>
-      <option value="note" {% if request.GET.listing_type == "note" %}selected{% endif %}>Ders Notu</option>
-    </select>
-  </div>
 
-  <div class="col-md-2">
-    <select name="donation_type" class="form-select">
-      <option value="">Bağış Türü</option>
-      <option value="free" {% if request.GET.donation_type == "free" %}selected{% endif %}>Bağış</option>
-      <option value="paid" {% if request.GET.donation_type == "paid" %}selected{% endif %}>Ücretli</option>
-    </select>
-  </div>
+<div class="bg-white rounded-xl shadow-md p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4 text-gray-700"><i class="fas fa-filter mr-2 text-primary"></i>Filtrele</h2>
+  <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-700">Seviye</label>
+      <select name="level" class="select select-bordered w-full">
+        <option value="">Hepsi</option>
+        <option value="primary" {% if request.GET.level == "primary" %}selected{% endif %}>İlkokul</option>
+        <option value="middle" {% if request.GET.level == "middle" %}selected{% endif %}>Ortaokul</option>
+        <option value="high" {% if request.GET.level == "high" %}selected{% endif %}>Lise</option>
+        <option value="university" {% if request.GET.level == "university" %}selected{% endif %}>Üniversite</option>
+      </select>
+    </div>
 
-  <div class="col-md-2">
-    <input type="text" name="related_course" placeholder="Ders Adı"
-           value="{{ request.GET.related_course }}" class="form-control">
-  </div>
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-700">Tür</label>
+      <select name="listing_type" class="select select-bordered w-full">
+        <option value="">Hepsi</option>
+        <option value="book" {% if request.GET.listing_type == "book" %}selected{% endif %}>Kitap</option>
+        <option value="note" {% if request.GET.listing_type == "note" %}selected{% endif %}>Ders Notu</option>
+      </select>
+    </div>
 
-  <div class="col-md-1">
-    <input type="number" name="min_price" placeholder="Min ₺"
-           value="{{ request.GET.min_price }}" class="form-control" min="0">
-  </div>
+    <div class="space-y-2">
+      <label class="block text-sm font-medium text-gray-700">Fiyat Aralığı</label>
+      <div class="flex space-x-2">
+        <input type="number" name="min_price" placeholder="Min ₺" value="{{ request.GET.min_price }}"
+               class="input input-bordered w-1/2" min="0">
+        <input type="number" name="max_price" placeholder="Max ₺" value="{{ request.GET.max_price }}"
+               class="input input-bordered w-1/2" min="0">
+      </div>
+    </div>
 
-  <div class="col-md-1">
-    <input type="number" name="max_price" placeholder="Max ₺"
-           value="{{ request.GET.max_price }}" class="form-control" min="0">
-  </div>
+    <div class="md:col-span-2 space-y-2">
+      <label class="block text-sm font-medium text-gray-700">Ders Adı</label>
+      <input type="text" name="related_course" placeholder="Matematik, Fizik vb."
+             value="{{ request.GET.related_course }}" class="input input-bordered w-full">
+    </div>
 
-  <div class="col-md-1">
-    <button type="submit" class="btn btn-primary w-100">Filtrele</button>
-  </div>
+    <div class="flex items-end space-x-2">
+      <button type="submit" class="btn btn-primary flex-1">
+        <i class="fas fa-search mr-2"></i> Filtrele
+      </button>
+      <a href="{% url 'home' %}" class="btn btn-outline flex-1">
+        <i class="fas fa-sync-alt mr-2"></i> Sıfırla
+      </a>
+    </div>
+  </form>
+</div>
 
-  <div class="col-md-1">
-    <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100">Sıfırla</a>
-  </div>
-</form>
 
-  <h2>İlanlar</h2>
+<div class="mb-6">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+    <i class="fas fa-book mr-2 text-primary"></i> Son Eklenenler
+  </h2>
 
   {% if listings %}
-    <div class="row">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for listing in listings %}
-        <div class="col-md-4">
-          <div class="card mb-4">
-            {% if listing.image and listing.image.name %}
-              <img src="{{ listing.image.url }}" class="card-img-top" alt="İlan Resmi">
-            {% else %}
-              <img src="/media/listing_images/default.png" class="card-img-top" alt="Varsayılan Resim">
-            {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ listing.title }}</h5>
+        <div class="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+          {% if listing.image and listing.image.name %}
+            <figure class="relative h-48 overflow-hidden rounded-t-lg">
+              <img src="{{ listing.image.url }}" alt="İlan Resmi" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
               {% if listing.donation_type == 'free' %}
-                <p class="text-success fw-bold">Bağış</p>
-              {% else %}
-                <p class="text-danger fw-bold">Ücretli: {{ listing.price }} ₺</p>
+                <div class="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                  ÜCRETSİZ
+                </div>
               {% endif %}
-              <p class="card-text">
-                {{ listing.related_course }}<br>
-                <small>İlan Sahibi: {{ listing.user.username }}</small>
-              </p>
-              <a href="{% url 'listing_detail' listing.id %}" class="btn btn-primary btn-sm">Detay</a>
+            </figure>
+          {% else %}
+            <figure class="relative h-48 bg-gray-100 rounded-t-lg flex items-center justify-center">
+              <i class="fas fa-book text-4xl text-gray-400"></i>
+            </figure>
+          {% endif %}
+
+          <div class="card-body p-4">
+            <div class="flex justify-between items-start">
+              <h3 class="card-title text-lg font-semibold">{{ listing.title }}</h3>
+              {% if listing.donation_type == 'paid' %}
+                <span class="badge badge-primary">{{ listing.price }} ₺</span>
+              {% endif %}
+            </div>
+
+            <div class="flex items-center text-sm text-gray-500 mt-1">
+              <i class="fas fa-graduation-cap mr-1"></i>
+              <span>{{ listing.get_level_display }}</span>
+            </div>
+
+            <div class="flex items-center text-sm text-gray-500 mt-1">
+              <i class="fas fa-bookmark mr-1"></i>
+              <span>{{ listing.related_course|default:"Genel" }}</span>
+            </div>
+
+            <div class="card-actions justify-end mt-4">
+              <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-outline btn-primary">
+                Detayları Gör <i class="fas fa-arrow-right ml-1"></i>
+              </a>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p>Henüz ilan yok.</p>
+    <div class="text-center py-12 bg-white rounded-lg shadow-sm">
+      <i class="fas fa-book-open text-4xl text-gray-300 mb-4"></i>
+      <h3 class="text-lg font-medium text-gray-500">Henüz ilan bulunmamaktadır</h3>
+      <p class="text-gray-400 mt-2">İlk ilanı siz oluşturmak ister misiniz?</p>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

@@ -1,19 +1,47 @@
 {% extends 'base.html' %}
-{% block title %}Giriş Yap{% endblock %}
-{% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="mb-4">Giriş Yap</h2>
-        <form method="post" class="card card-body shadow">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-success mt-3">Giriş</button>
-        </form>
+{% block title %}Giriş Yap | Bookloop{% endblock %}
 
-        <!-- Şifremi Unuttum bağlantısı -->
-        <div class="mt-3 text-center">
-            <a href="{% url 'password_reset_request' %}">Şifrenizi mi unuttunuz?</a>
-        </div>
+{% block content %}
+<div class="max-w-md mx-auto my-10">
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6 text-center">
+      <i class="fas fa-user-lock text-3xl mb-2"></i>
+      <h1 class="text-2xl font-bold">Hesabınıza Giriş Yapın</h1>
     </div>
+
+    <form method="post" class="p-6 space-y-4">
+      {% csrf_token %}
+      
+      {% for field in form %}
+      <div class="form-control">
+        <label class="label" for="{{ field.id_for_label }}">
+          <span class="label-text">{{ field.label }}</span>
+        </label>
+        {{ field }}
+        {% for error in field.errors %}
+          <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary w-full mt-6">
+        <i class="fas fa-sign-in-alt mr-2"></i> Giriş Yap
+      </button>
+
+      <div class="divider">veya</div>
+
+      <div class="text-center space-y-3">
+        <a href="{% url 'password_reset_request' %}" class="link link-hover text-sm text-primary">
+          <i class="fas fa-key mr-1"></i> Şifremi Unuttum
+        </a>
+        <p class="text-sm text-gray-500">
+          Hesabınız yok mu? 
+          <a href="{% url 'register' %}" class="link link-hover text-primary font-medium">
+            Kayıt Olun
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -1,38 +1,35 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-  <a class="navbar-brand" href="{% url 'home' %}">Kitap Platformu</a>
-
- <div class="collapse navbar-collapse">
-    {% if user.is_authenticated %}
-    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Anasayfa</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'top_donors' %}">En Çok Bağış Yapanlar</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'favorites_list' %}">Favorilerim</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'interested_list' %}">İlgilenilenler</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'my_listings' %}">İlanlarım</a></li>
-      <li class="nav-item"><a class="nav-link" href="{% url 'conversation_list' %}">Mesajlar</a></li>  <!-- burası -->
-      <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profil</a></li>
-    </ul>
-    {% endif %}
-  </div>
-
-  <div class="d-flex align-items-center">
-    {% if user.is_authenticated %}
-    <form action="{% url 'toggle_dark_mode' %}" method="post" class="me-2">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-light btn-sm">
-        {% if request.COOKIES.dark_mode == 'true' %}☀️ Aydınlık Mod{% else %}🌙 Karanlık Mod{% endif %}
-      </button>
-    </form>
-
-    <span class="navbar-text me-3">Merhaba, {{ user.username }}</span>
-
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-light btn-sm">Çıkış</button>
-    </form>
-    {% else %}
-      <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm me-2">Giriş</a>
-      <a href="{% url 'register' %}" class="btn btn-outline-light btn-sm">Kayıt</a>
-    {% endif %}
+<nav class="bg-white shadow-sm border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        <a href="{% url 'home' %}" class="flex items-center text-xl font-bold text-primary">
+          <i class="fas fa-book-open mr-2"></i>
+          Bookloop
+        </a>
+      </div>
+      <div class="flex items-center space-x-4">
+        {% if user.is_authenticated %}
+          <div class="relative">
+            <button class="flex items-center space-x-2 focus:outline-none">
+              <span class="hidden md:inline">{{ user.username }}</span>
+              <i class="fas fa-user-circle text-2xl text-gray-600"></i>
+            </button>
+          </div>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="btn btn-sm btn-outline btn-error">
+              <i class="fas fa-sign-out-alt mr-1"></i> Çıkış
+            </button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-sm btn-primary">
+            <i class="fas fa-sign-in-alt mr-1"></i> Giriş
+          </a>
+          <a href="{% url 'register' %}" class="btn btn-sm btn-secondary">
+            <i class="fas fa-user-plus mr-1"></i> Kayıt
+          </a>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </nav>

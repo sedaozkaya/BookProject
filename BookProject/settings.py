@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'messaging',
     'accounts',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

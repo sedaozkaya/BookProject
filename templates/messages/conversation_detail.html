@@ -1,26 +1,74 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
-<div class="container mt-4">
-  <h3>İlan: {{ conversation.listing.title }}</h3>
+<div class="max-w-3xl mx-auto my-8">
+  <div class="bg-white rounded-xl shadow-md overflow-hidden">
+    <!-- Başlık -->
+    <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6">
+      <h2 class="text-xl font-bold flex items-center">
+        <i class="fas fa-comments mr-3"></i>
+        {{ conversation.listing.title }}
+      </h2>
+      <p class="text-sm opacity-90 mt-1">
+        {% if conversation.buyer == user %}
+          Satıcı: {{ conversation.seller.username }}
+        {% else %}
+          Alıcı: {{ conversation.buyer.username }}
+        {% endif %}
+      </p>
+    </div>
 
-  <div class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
-    {% if chat_messages %}
-      {% for message in chat_messages %}
-        <div class="mb-2 {% if message.sender == user %}text-end{% endif %}">
-          <strong>{{ message.sender.username }}</strong><br>
-          {{ message.text }}<br>
-          <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+ 
+    <div class="p-4 h-96 overflow-y-auto bg-gray-50">
+      {% if chat_messages %}
+        <div class="space-y-4">
+          {% for message in chat_messages %}
+            <div class="flex {% if message.sender == user %}justify-end{% else %}justify-start{% endif %}">
+              <div class="max-w-xs md:max-w-md lg:max-w-lg rounded-lg p-4 
+                {% if message.sender == user %}bg-primary text-white{% else %}bg-gray-200 text-gray-800{% endif %}">
+                <div class="font-semibold">{{ message.sender.username }}</div>
+                <p class="mt-1">{{ message.text }}</p>
+                <div class="text-xs mt-2 {% if message.sender == user %}text-primary-content{% else %}text-gray-500{% endif %}">
+                  {{ message.timestamp|date:"d/m/Y H:i" }}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    {% else %}
-      <p class="text-muted">Henüz mesaj yok.</p>
-    {% endif %}
-  </div>
+      {% else %}
+        <div class="text-center py-10 text-gray-500">
+          <i class="fas fa-comment-slash text-4xl mb-3"></i>
+          <p>Henüz mesaj yok</p>
+        </div>
+      {% endif %}
+    </div>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.text }}
-    <button type="submit" class="btn btn-primary mt-2">Gönder</button>
-  </form>
+
+    <div class="border-t p-4 bg-white">
+      <form method="post" class="flex gap-2">
+        {% csrf_token %}
+        {{ form.text|add_class:"input input-bordered flex-1" }}
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane mr-2"></i> Gönder
+        </button>
+      </form>
+    </div>
+  </div>
 </div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+  const messageInput = document.querySelector('input[name="text"]');
+  if (messageInput) {
+    messageInput.focus();
+  }
+  
+
+  const messagesContainer = document.querySelector('.overflow-y-auto');
+  if (messagesContainer) {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+});
+</script>
 {% endblock %}

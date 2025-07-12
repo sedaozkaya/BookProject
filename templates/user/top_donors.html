@@ -1,37 +1,59 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="max-w-3xl mx-auto">
+  <div class="bg-gradient-to-r from-primary to-indigo-600 text-white rounded-xl p-6 mb-8 shadow-lg">
+    <h1 class="text-2xl font-bold flex items-center">
+      <i class="fas fa-trophy mr-3 text-yellow-300"></i>
+      En Çok Bağış Yapanlar
+    </h1>
+    <p class="mt-2 opacity-90">Topluluğumuza en çok katkı sağlayan fedakar üyelerimiz</p>
+  </div>
 
-  <h3 class="mb-3">🏆 En Çok Bağış Yapanlar</h3>
-
-  <ul class="nav nav-tabs mb-4" id="donorTab" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" id="weekly-tab" data-bs-toggle="tab" href="#weekly" role="tab">Haftalık</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="monthly-tab" data-bs-toggle="tab" href="#monthly" role="tab">Aylık</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab">Tüm Zamanlar</a>
-    </li>
-  </ul>
-
-  <div class="tab-content" id="donorTabContent">
-    <!-- Haftalık -->
-    <div class="tab-pane fade show active" id="weekly" role="tabpanel">
-      {% include 'user/_donor_list.html' with donors=weekly_donors %}
+  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+    <div role="tablist" class="flex border-b border-gray-200">
+      <button role="tab" class="px-6 py-3 font-medium text-sm border-b-2 border-primary text-primary transition" 
+              onclick="showTab('weekly')">
+        <i class="fas fa-calendar-week mr-2"></i> Haftalık
+      </button>
+      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 hover:text-primary transition" 
+              onclick="showTab('monthly')">
+        <i class="fas fa-calendar-alt mr-2"></i> Aylık
+      </button>
+      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 hover:text-primary transition" 
+              onclick="showTab('all')">
+        <i class="fas fa-award mr-2"></i> Tüm Zamanlar
+      </button>
     </div>
 
-    <!-- Aylık -->
-    <div class="tab-pane fade" id="monthly" role="tabpanel">
-      {% include 'user/_donor_list.html' with donors=monthly_donors %}
-    </div>
-
-    <!-- Tüm zamanlar -->
-    <div class="tab-pane fade" id="all" role="tabpanel">
-      {% include 'user/_donor_list.html' with donors=all_time_donors %}
+    <div id="tab-content" class="p-6">
+      <div id="weekly" class="tab-pane">
+        {% include 'user/_donor_list.html' with donors=weekly_donors %}
+      </div>
+      <div id="monthly" class="tab-pane hidden">
+        {% include 'user/_donor_list.html' with donors=monthly_donors %}
+      </div>
+      <div id="all" class="tab-pane hidden">
+        {% include 'user/_donor_list.html' with donors=all_time_donors %}
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  function showTab(id) {
+    const panes = document.querySelectorAll('.tab-pane');
+    panes.forEach(pane => pane.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+
+    const tabs = document.querySelectorAll('[role="tab"]');
+    tabs.forEach(tab => {
+      tab.classList.remove('text-primary', 'border-primary');
+      tab.classList.add('text-gray-500');
+    });
+    
+    event.target.classList.add('text-primary', 'border-primary');
+    event.target.classList.remove('text-gray-500');
+  }
+</script>
 {% endblock %}

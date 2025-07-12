@@ -1,14 +1,50 @@
 {% extends 'base.html' %}
-{% block title %}Kayıt Ol{% endblock %}
+{% block title %}Kayıt Ol | Bookloop{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="mb-4">Kayıt Ol</h2>
-        <form method="post" class="card card-body shadow">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary mt-3">Kayıt</button>
-        </form>
+<div class="max-w-md mx-auto my-10">
+  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6 text-center">
+      <i class="fas fa-user-plus text-3xl mb-2"></i>
+      <h1 class="text-2xl font-bold">Yeni Hesap Oluşturun</h1>
     </div>
+
+    <form method="post" class="p-6 space-y-4">
+      {% csrf_token %}
+      
+      {% for field in form %}
+      <div class="form-control">
+        <label class="label" for="{{ field.id_for_label }}">
+          <span class="label-text">{{ field.label }}</span>
+          {% if field.field.required %}
+            <span class="text-red-500">*</span>
+          {% endif %}
+        </label>
+        {{ field }}
+        {% if field.help_text %}
+          <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+        {% endif %}
+        {% for error in field.errors %}
+          <p class="text-xs text-red-500 mt-1">{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-success w-full mt-6">
+        <i class="fas fa-user-check mr-2"></i> Kayıt Ol
+      </button>
+
+      <div class="divider">veya</div>
+
+      <div class="text-center">
+        <p class="text-sm text-gray-500">
+          Zaten hesabınız var mı?
+          <a href="{% url 'login' %}" class="link link-hover text-primary font-medium">
+            Giriş Yapın
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
