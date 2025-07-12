@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4" style="max-width: 500px; margin: auto;">
+    <h4 class="mb-3 text-danger">Hesabınızı Silmek Üzeresiniz</h4>
+    <p>Lütfen şifrenizi girerek işlemi onaylayın. Bu işlem geri alınamaz.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-danger w-100">Hesabımı Kalıcı Olarak Sil</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

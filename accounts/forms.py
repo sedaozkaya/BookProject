@@ -55,3 +55,13 @@ class SetNewPasswordForm(BootstrapFormMixin, forms.Form):
         if p1 and p2 and p1 != p2:
             raise forms.ValidationError("Şifreler eşleşmiyor.")
         return cleaned_data
+
+
+
+from django import forms
+
+class ConfirmPasswordForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Şifrenizi onaylayın"
+    )

@@ -1,11 +1,11 @@
-
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from .models import PasswordResetCode
 from .forms import PasswordResetRequestForm, PasswordResetCodeForm, SetNewPasswordForm
 from django.contrib import messages
+from .forms import ConfirmPasswordForm
 
 def password_reset_request_view(request):
     if request.method == 'POST':
@@ -87,3 +87,32 @@ def password_reset_confirm_view(request):
     return render(request, 'accounts/password_reset_confirm.html', {'form': form})
 
 
+@login_required
+def delete_account(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = ConfirmPasswordForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            if user.check_password(password):
+                email = user.email
+                username = user.username
+                user.delete()
+
+                send_mail(
+                    subject='BookLoop Hesabınız Silindi',
+                    message=f'Merhaba {username},\n\nBookLoop hesabınız başarıyla silinmiştir.',
+                    from_email='bookloop.destek@gmail.com',
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
+
+                messages.success(request, 'Hesabınız silindi. E-posta ile bilgilendirme yapıldı.')
+                return redirect('home')
+            else:
+                messages.error(request, 'Şifreniz yanlış.')
+    else:
+        form = ConfirmPasswordForm()
+
+    return render(request, 'accounts/delete_account.html', {'form': form})

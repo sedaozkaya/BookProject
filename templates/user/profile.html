@@ -13,8 +13,15 @@
       <p><strong>Kayıt Tarihi:</strong> {{ user.date_joined|date:"d/m/Y H:i" }}</p>
 
       <hr>
+
       <!-- Güncelleme bağlantısı -->
       <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm">Profil Bilgilerini Güncelle</a>
+
+      <!-- Hesap silme bağlantısı -->
+      <a href="{% url 'delete_account' %}" class="btn btn-outline-danger btn-sm float-end"
+         onclick="return confirm('Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz.')">
+        Hesabımı Sil
+      </a>
     </div>
   </div>
 </div>
