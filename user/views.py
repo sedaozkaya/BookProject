@@ -1,13 +1,13 @@
-from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.db.models import Count, Q, Prefetch
-from django.shortcuts import render, redirect
 
-from listings.models import Listing, Interested
-from user import forms
+from django.db.models import Count, Q, Prefetch
+
 from user.forms import UserUpdateForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -79,3 +79,7 @@ def toggle_dark_mode(request):
     current = request.COOKIES.get('dark_mode', 'false')
     response.set_cookie('dark_mode', 'false' if current == 'true' else 'true', max_age=60*60*24*365)
     return response
+
+
+
+
