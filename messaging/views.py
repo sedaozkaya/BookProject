@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from listings.models import Listing
 from messaging.forms import MessageForm
-from messaging.models import Conversation
+from messaging.models import Conversation, Message
 from django.contrib import messages
 from django.db.models import Q
 
@@ -27,11 +27,14 @@ def start_conversation(request, listing_id):
 
     return redirect('conversation_detail', conversation_id=conversation.id)
 
+from django.contrib import messages as django_messages  # ⚠️ Çakışmayı önlemek için alias verdik
+
 @login_required
 def conversation_detail(request, conversation_id):
     conversation = get_object_or_404(Conversation, id=conversation_id)
+
     if request.user not in [conversation.buyer, conversation.seller]:
-        messages.error(request, "Bu konuşmaya erişim yetkiniz yok.")
+        django_messages.error(request, "Bu konuşmaya erişim yetkiniz yok.")
         return redirect('home')
 
     if request.method == 'POST':
@@ -40,15 +43,17 @@ def conversation_detail(request, conversation_id):
             Message.objects.create(
                 conversation=conversation,
                 sender=request.user,
-                content=content
+                text=content  # ✅ doğru alan adı
             )
             return redirect('conversation_detail', conversation_id=conversation.id)
 
-    messages_list = conversation.messages.all()
+    message_list = conversation.messages.all()  # ✅ 'messages' yerine 'message_list' diyelim ki karışmasın
+
     return render(request, 'messages/conversation_detail.html', {
         'conversation': conversation,
-        'messages': messages_list
+        'messages': message_list,
     })
+
 
 @login_required
 def conversation_list(request):
