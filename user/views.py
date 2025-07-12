@@ -2,10 +2,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Prefetch
 from django.shortcuts import render, redirect
 
-from listings.models import Listing
+from listings.models import Listing, Interested
 from user import forms
 from user.forms import UserUpdateForm
 
@@ -39,10 +39,17 @@ def register(request):
 @login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
+
+from django.db.models import Prefetch
+from listings.models import Listing, Interested
+
 @login_required
 def my_listings(request):
-    listings = Listing.objects.filter(user=request.user).order_by('-created_at')
+    listings = Listing.objects.filter(user=request.user).prefetch_related(
+        Prefetch('interested_set', queryset=Interested.objects.select_related('user'), to_attr='interested_users')
+    )
     return render(request, 'user/my_listings.html', {'listings': listings})
+
 
 
 

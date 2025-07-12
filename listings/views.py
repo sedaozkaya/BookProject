@@ -20,6 +20,12 @@ def create_listing(request):
         form = ListingForm()
     return render(request, 'listing/create_listing.html', {'form': form})
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+
+from listings.models import Listing, Favorite, Interested
+
 @login_required
 def listing_detail(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
@@ -50,11 +56,16 @@ def listing_detail(request, pk):
                 messages.success(request, "İlgilenme iptal edildi.")
             return redirect('listing_detail', pk=pk)
 
+
+    interested_users = Interested.objects.filter(listing=listing)
+
     return render(request, 'listing/listing_detail.html', {
         'listing': listing,
         'is_favorited': is_favorited,
         'is_interested': is_interested,
+        'interested_users': interested_users
     })
+
 
 @login_required
 def favorites_list(request):

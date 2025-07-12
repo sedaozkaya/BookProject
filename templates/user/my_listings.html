@@ -19,11 +19,22 @@
               <h5 class="card-title">{{ listing.title }}</h5>
               <p class="card-text">{{ listing.related_course }}</p>
 
-              <div class="d-flex justify-content-between">
+              {# İlgi gösteren kullanıcıları listele #}
+              {% if listing.interested_users %}
+                <p><strong>İlgilenenler:</strong></p>
+                <ul>
+                  {% for interested in listing.interested_users %}
+                    <li>{{ interested.user.username }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p><em>Henüz ilgilenen yok.</em></p>
+              {% endif %}
+
+              <div class="d-flex justify-content-between mt-2">
                 <a href="{% url 'listing_detail' listing.id %}" class="btn btn-sm btn-primary">Detay</a>
                 <a href="{% url 'edit_listing' listing.id %}" class="btn btn-sm btn-warning">Düzenle</a>
-                  <a href="{% url 'delete_listing' listing.id %}" class="btn btn-sm btn-danger">Sil</a>
-
+                <a href="{% url 'delete_listing' listing.id %}" class="btn btn-sm btn-danger">Sil</a>
               </div>
             </div>
           </div>
