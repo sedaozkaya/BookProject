@@ -1,3 +1,7 @@
+from django.db.models import Count, Q
+from django.utils import timezone
+from datetime import timedelta
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -68,11 +72,39 @@ def edit_profile(request):
     return render(request, 'user/edit_profile.html', {'form': form})
 
 def top_donors(request):
-    donors = User.objects.annotate(
+    now = timezone.now()
+    one_week_ago = now - timedelta(days=7)
+    one_month_ago = now - timedelta(days=30)
+
+    # Tüm zamanların donörleri
+    all_time_donors = User.objects.annotate(
         free_count=Count('listing', filter=Q(listing__donation_type='free'))
     ).filter(free_count__gt=0).order_by('-free_count')[:10]
 
-    return render(request, 'user/top_donors.html', {'donors': donors})
+    # Haftalık donörler
+    weekly_donors = User.objects.annotate(
+        free_count=Count('listing', filter=Q(
+            listing__donation_type='free',
+            listing__created_at__gte=one_week_ago
+        ))
+    ).filter(free_count__gt=0).order_by('-free_count')[:10]
+
+    # Aylık donörler
+    monthly_donors = User.objects.annotate(
+        free_count=Count('listing', filter=Q(
+            listing__donation_type='free',
+            listing__created_at__gte=one_month_ago
+        ))
+    ).filter(free_count__gt=0).order_by('-free_count')[:10]
+
+    context = {
+        'all_time_donors': all_time_donors,
+        'weekly_donors': weekly_donors,
+        'monthly_donors': monthly_donors,
+    }
+
+    return render(request, 'user/top_donors.html', context)
+
 
 def toggle_dark_mode(request):
     response = redirect(request.META.get('HTTP_REFERER', 'home'))

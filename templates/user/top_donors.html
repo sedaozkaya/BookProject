@@ -2,19 +2,36 @@
 
 {% block content %}
 <div class="container mt-4">
-  <h3 class="mb-4">En Çok Bağış Yapanlar</h3>
 
-  {% if donors %}
-    <ul class="list-group">
-      {% for user in donors %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ forloop.counter }}. {{ user.username }}
-          <span class="badge bg-success rounded-pill">{{ user.free_count }} bağış</span>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>Henüz bağış yapan kullanıcı bulunamadı.</p>
-  {% endif %}
+  <h3 class="mb-3">🏆 En Çok Bağış Yapanlar</h3>
+
+  <ul class="nav nav-tabs mb-4" id="donorTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="weekly-tab" data-bs-toggle="tab" href="#weekly" role="tab">Haftalık</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="monthly-tab" data-bs-toggle="tab" href="#monthly" role="tab">Aylık</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab">Tüm Zamanlar</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="donorTabContent">
+    <!-- Haftalık -->
+    <div class="tab-pane fade show active" id="weekly" role="tabpanel">
+      {% include 'user/_donor_list.html' with donors=weekly_donors %}
+    </div>
+
+    <!-- Aylık -->
+    <div class="tab-pane fade" id="monthly" role="tabpanel">
+      {% include 'user/_donor_list.html' with donors=monthly_donors %}
+    </div>
+
+    <!-- Tüm zamanlar -->
+    <div class="tab-pane fade" id="all" role="tabpanel">
+      {% include 'user/_donor_list.html' with donors=all_time_donors %}
+    </div>
+  </div>
 </div>
 {% endblock %}
