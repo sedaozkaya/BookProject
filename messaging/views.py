@@ -51,6 +51,10 @@ def conversation_detail(request, conversation_id):
         'chat_messages': chat_messages,
         'form': form,
     }
+    for msg in conversation.messages.exclude(sender=request.user):
+        if not msg.is_read:
+            msg.is_read = True
+            msg.save()
     return render(request, 'messages/conversation_detail.html', context)
 
 @login_required
