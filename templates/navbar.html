@@ -1,19 +1,23 @@
-<nav class="bg-white shadow-sm border-b border-gray-200">
+<nav class="bg-white shadow-sm border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
       <div class="flex items-center">
-        <a href="{% url 'home' %}" class="flex items-center text-xl font-bold text-primary">
-          <i class="fas fa-book-open mr-2"></i>
-          Bookloop
+        <a href="{% url 'home' %}" class="flex items-center text-xl font-bold text-primary dark:text-primary-light">
+          <i class="fas fa-book-open mr-2"></i> Bookloop
         </a>
       </div>
       <div class="flex items-center space-x-4">
+        <!-- Dark Mode Toggle Button -->
+        <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2">
+          <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
+
         {% if user.is_authenticated %}
           <div class="relative">
-            <button class="flex items-center space-x-2 focus:outline-none">
-              <span class="hidden md:inline">{{ user.username }}</span>
-              <i class="fas fa-user-circle text-2xl text-gray-600"></i>
-            </button>
+            <a href="{% url 'profile' %}" class="flex items-center space-x-2 focus:outline-none">
+              <span class="hidden md:inline dark:text-white">{{ user.username }}</span>
+              <i class="fas fa-user-circle text-2xl text-gray-600 dark:text-gray-300"></i>
+            </a>
           </div>
           <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}

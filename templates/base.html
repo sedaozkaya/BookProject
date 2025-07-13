@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="tr" data-theme="light">
+<html lang="en" class="{% if dark_mode %}dark{% endif %}">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>{% block title %}Bookloop | Öğrenciler İçin Kitap & Ders Notu Platformu{% endblock %}</title>
   {% load static %}
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             primary: '#4F46E5',
             secondary: '#F59E0B',
-            accent: '#10B981'
+            accent: '#10B981',
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    };
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.8.1/dist/full.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col dark:bg-gray-900 dark:text-white">
   {% include 'navbar.html' %}
 
   <div class="flex flex-1">
@@ -54,5 +58,33 @@
   </div>
 
   {% include 'footer.html' %}
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    // Sayfa ilk yüklendiğinde icon durumunu backend'den gelen dark_mode değişkenine göre ayarla
+    if ({{ dark_mode|yesno:"true,false" }}) {
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
+    } else {
+      themeIcon.classList.replace('fa-sun', 'fa-moon');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+
+      // İkon değiştir
+      if (isDark) {
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+        localStorage.setItem('color-theme', 'dark');
+        // Cookie güncelleme için fetch ile backend'e istek atabilirsin
+        fetch("{% url 'toggle_dark_mode' %}"); // bu view'ı sen yazmalısın
+      } else {
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+        localStorage.setItem('color-theme', 'light');
+        fetch("{% url 'toggle_dark_mode' %}"); // bu view'ı sen yazmalısın
+      }
+    });
+  </script>
 </body>
 </html>

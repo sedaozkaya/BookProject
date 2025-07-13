@@ -11,3 +11,8 @@ def unread_messages_count(request):
         ).exclude(sender=user).count()
         return {'messages_count': unread_count}
     return {'messages_count': 0}
+
+
+def dark_mode(request):
+    dark_mode_enabled = request.COOKIES.get('dark_mode') == 'true'
+    return {'dark_mode': dark_mode_enabled}

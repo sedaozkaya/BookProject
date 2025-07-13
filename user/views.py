@@ -1,4 +1,4 @@
-from django.db.models import Count, Q
+
 from django.utils import timezone
 from datetime import timedelta
 
@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
-from django.db.models import Count, Q, Prefetch
+from django.db.models import Count, Q
 
 from user.forms import UserUpdateForm
 from django.shortcuts import render, redirect
@@ -106,12 +106,16 @@ def top_donors(request):
     return render(request, 'user/top_donors.html', context)
 
 
-def toggle_dark_mode(request):
-    response = redirect(request.META.get('HTTP_REFERER', 'home'))
-    current = request.COOKIES.get('dark_mode', 'false')
-    response.set_cookie('dark_mode', 'false' if current == 'true' else 'true', max_age=60*60*24*365)
-    return response
 
+
+from django.shortcuts import redirect
+
+def toggle_dark_mode(request):
+    response = redirect(request.META.get('HTTP_REFERER', '/'))
+    current = request.COOKIES.get('dark_mode', 'false')
+    new_value = 'false' if current == 'true' else 'true'
+    response.set_cookie('dark_mode', new_value, max_age=60*60*24*365)
+    return response
 
 
 
