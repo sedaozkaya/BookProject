@@ -173,4 +173,13 @@ def my_listings(request):
     return render(request, 'user/my_listings.html', {'listings': listings})
 
 
+@login_required
+def express_interest_and_message(request, listing_id):
+    listing = get_object_or_404(Listing, id=listing_id)
+
+
+    Interested.objects.get_or_create(user=request.user, listing=listing)
+
+
+    return redirect('start_conversation', listing_id=listing.id)
 

@@ -35,7 +35,6 @@
         <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">{{ listing.title }}</h1>
         <p class="text-gray-500 dark:text-gray-400 mb-6">{{ listing.related_course }}</p>
 
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
           <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
             <h3 class="font-semibold text-gray-700 dark:text-gray-200 mb-2">Temel Bilgiler</h3>
@@ -72,7 +71,6 @@
           </div>
         </div>
 
-       
         <div class="collapse collapse-arrow bg-gray-50 dark:bg-gray-700 mb-6">
           <input type="checkbox" /> 
           <div class="collapse-title font-medium text-gray-700 dark:text-gray-200">
@@ -102,21 +100,14 @@
           </div>
         </div>
 
-      
         {% if user.is_authenticated %}
           {% if user != listing.user %}
             <div class="flex flex-wrap gap-3 mt-6">
-              <form method="post" class="flex-1">
-                {% csrf_token %}
-                <button type="submit" name="interested" 
-                        class="btn w-full {% if is_interested %}btn-success{% else %}btn-outline btn-success{% endif %}">
-                  <i class="fas fa-heart mr-2"></i>
-                  {% if is_interested %}İlgileniyorum{% else %}İlgilen{% endif %}
-                </button>
-              </form>
 
-              <a href="{% url 'start_conversation' listing.id %}" class="btn btn-info flex-1">
-                <i class="fas fa-comments mr-2"></i> Mesajlaş
+              
+              <a href="{% url 'interest_and_message' listing.id %}" 
+                 class="btn w-full btn-success">
+                <i class="fas fa-heart mr-2"></i> İlgilen 
               </a>
 
               <form method="post" class="flex-1">
@@ -127,9 +118,9 @@
                   {% if is_favorited %}Favorilerden Çıkar{% else %}Favori Ekle{% endif %}
                 </button>
               </form>
+
             </div>
           {% else %}
-            
             <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mt-6">
               <h4 class="font-semibold text-blue-800 dark:text-blue-300 mb-3 flex items-center">
                 <i class="fas fa-users mr-2"></i> İlgilenenler ({{ interested_users.count }})

@@ -56,6 +56,7 @@ class Favorite(models.Model):
         verbose_name_plural = 'Favoriler'
 
 
+
 class Interested(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
