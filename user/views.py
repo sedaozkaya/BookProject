@@ -14,19 +14,8 @@ from django.contrib.auth.models import User
 
 
 
-class CustomUserCreationForm(UserCreationForm):
+from user.forms import CustomUserCreationForm, UserUpdateForm
 
-
-    class Meta:
-        model = User
-        fields = ("username", "email", "password1", "password2")
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
-        return user
 
 def register(request):
     if request.method == 'POST':
