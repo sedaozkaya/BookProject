@@ -12,7 +12,7 @@
     </a>
   {% else %}
     <div class="flex items-center space-x-4">
-      <p>İlan oluşturmak için giriş yapmalısınız</p>
+      <p class="dark:text-gray-300">İlan oluşturmak için giriş yapmalısınız</p>
       <a href="{% url 'login' %}" class="btn btn-outline btn-sm text-white hover:bg-white hover:text-primary">
         Giriş Yap
       </a>
@@ -20,13 +20,12 @@
   {% endif %}
 </div>
 
-
-<div class="bg-white rounded-xl shadow-md p-6 mb-8">
-  <h2 class="text-xl font-semibold mb-4 text-gray-700"><i class="fas fa-filter mr-2 text-primary"></i>Filtrele</h2>
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+  <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200"><i class="fas fa-filter mr-2 text-primary"></i>Filtrele</h2>
   <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">Seviye</label>
-      <select name="level" class="select select-bordered w-full">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Seviye</label>
+      <select name="level" class="select select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
         <option value="">Hepsi</option>
         <option value="primary" {% if request.GET.level == "primary" %}selected{% endif %}>İlkokul</option>
         <option value="middle" {% if request.GET.level == "middle" %}selected{% endif %}>Ortaokul</option>
@@ -36,8 +35,8 @@
     </div>
 
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">Tür</label>
-      <select name="listing_type" class="select select-bordered w-full">
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tür</label>
+      <select name="listing_type" class="select select-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
         <option value="">Hepsi</option>
         <option value="book" {% if request.GET.listing_type == "book" %}selected{% endif %}>Kitap</option>
         <option value="note" {% if request.GET.listing_type == "note" %}selected{% endif %}>Ders Notu</option>
@@ -45,19 +44,19 @@
     </div>
 
     <div class="space-y-2">
-      <label class="block text-sm font-medium text-gray-700">Fiyat Aralığı</label>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fiyat Aralığı</label>
       <div class="flex space-x-2">
         <input type="number" name="min_price" placeholder="Min ₺" value="{{ request.GET.min_price }}"
-               class="input input-bordered w-1/2" min="0">
+               class="input input-bordered w-1/2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" min="0">
         <input type="number" name="max_price" placeholder="Max ₺" value="{{ request.GET.max_price }}"
-               class="input input-bordered w-1/2" min="0">
+               class="input input-bordered w-1/2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" min="0">
       </div>
     </div>
 
     <div class="md:col-span-2 space-y-2">
-      <label class="block text-sm font-medium text-gray-700">Ders Adı</label>
+      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Ders Adı</label>
       <input type="text" name="related_course" placeholder="Matematik, Fizik vb."
-             value="{{ request.GET.related_course }}" class="input input-bordered w-full">
+             value="{{ request.GET.related_course }}" class="input input-bordered w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
     </div>
 
     <div class="flex items-end space-x-2">
@@ -71,16 +70,15 @@
   </form>
 </div>
 
-
 <div class="mb-6">
-  <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+  <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
     <i class="fas fa-book mr-2 text-primary"></i> Son Eklenenler
   </h2>
 
   {% if listings %}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for listing in listings %}
-        <div class="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+        <div class="card bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
           {% if listing.image and listing.image.name %}
             <figure class="relative h-48 overflow-hidden rounded-t-lg">
               <img src="{{ listing.image.url }}" alt="İlan Resmi" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
@@ -91,25 +89,25 @@
               {% endif %}
             </figure>
           {% else %}
-            <figure class="relative h-48 bg-gray-100 rounded-t-lg flex items-center justify-center">
-              <i class="fas fa-book text-4xl text-gray-400"></i>
+            <figure class="relative h-48 bg-gray-100 dark:bg-gray-700 rounded-t-lg flex items-center justify-center">
+              <i class="fas fa-book text-4xl text-gray-400 dark:text-gray-300"></i>
             </figure>
           {% endif %}
 
           <div class="card-body p-4">
             <div class="flex justify-between items-start">
-              <h3 class="card-title text-lg font-semibold">{{ listing.title }}</h3>
+              <h3 class="card-title text-lg font-semibold text-gray-900 dark:text-gray-100">{{ listing.title }}</h3>
               {% if listing.donation_type == 'paid' %}
                 <span class="badge badge-primary">{{ listing.price }} ₺</span>
               {% endif %}
             </div>
 
-            <div class="flex items-center text-sm text-gray-500 mt-1">
+            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
               <i class="fas fa-graduation-cap mr-1"></i>
               <span>{{ listing.get_level_display }}</span>
             </div>
 
-            <div class="flex items-center text-sm text-gray-500 mt-1">
+            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
               <i class="fas fa-bookmark mr-1"></i>
               <span>{{ listing.related_course|default:"Genel" }}</span>
             </div>
@@ -124,10 +122,10 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="text-center py-12 bg-white rounded-lg shadow-sm">
-      <i class="fas fa-book-open text-4xl text-gray-300 mb-4"></i>
-      <h3 class="text-lg font-medium text-gray-500">Henüz ilan bulunmamaktadır</h3>
-      <p class="text-gray-400 mt-2">İlk ilanı siz oluşturmak ister misiniz?</p>
+    <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+      <i class="fas fa-book-open text-4xl text-gray-300 dark:text-gray-400 mb-4"></i>
+      <h3 class="text-lg font-medium text-gray-500 dark:text-gray-400">Henüz ilan bulunmamaktadır</h3>
+      <p class="text-gray-400 dark:text-gray-500 mt-2">İlk ilanı siz oluşturmak ister misiniz?</p>
     </div>
   {% endif %}
 </div>

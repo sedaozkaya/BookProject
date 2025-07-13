@@ -59,13 +59,17 @@ def conversation_detail(request, conversation_id):
 
 @login_required
 def conversation_list(request):
-    conversations = Conversation.objects.filter(
-        buyer=request.user
-    ) | Conversation.objects.filter(
-        seller=request.user
-    )
-    conversations = conversations.distinct().order_by('-created_at')
-    return render(request, 'messages/conversation_list.html', {'conversations': conversations})
+    user = request.user
+    conversations = (Conversation.objects.filter(buyer=user) | Conversation.objects.filter(seller=user)).distinct().order_by('-created_at')
+
+    for conv in conversations:
+        conv.unread_count = conv.messages.filter(is_read=False).exclude(sender=user).count()
+
+    return render(request, 'messages/conversation_list.html', {
+        'conversations': conversations,
+        'user': user,
+    })
+
 
 @login_required
 def my_conversations(request):
@@ -73,7 +77,15 @@ def my_conversations(request):
     conversations = Conversation.objects.filter(seller=user) | Conversation.objects.filter(buyer=user)
     conversations = conversations.distinct().order_by('-created_at')
 
+
+    for conv in conversations:
+        conv.unread_count = Message.objects.filter(
+            conversation=conv,
+            is_read=False
+        ).exclude(sender=user).count()
+
     context = {
         'conversations': conversations,
     }
     return render(request, 'messages/my_conversations.html', context)
+

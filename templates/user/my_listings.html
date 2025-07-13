@@ -4,7 +4,7 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <div class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 flex items-center">
       <i class="fas fa-list-alt text-primary mr-3"></i> İlanlarım
     </h1>
     <a href="{% url 'create_listing' %}" class="btn btn-primary">
@@ -15,7 +15,7 @@
   {% if listings %}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for listing in listings %}
-      <div class="card bg-white shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100">
+      <div class="card bg-white dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
         {% if listing.image and listing.image.name %}
           <figure class="relative h-48 overflow-hidden rounded-t-lg">
             <img src="{{ listing.image.url }}" alt="{{ listing.title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
@@ -26,32 +26,32 @@
             {% endif %}
           </figure>
         {% else %}
-          <figure class="relative h-48 bg-gray-100 rounded-t-lg flex items-center justify-center">
-            <i class="fas fa-book text-4xl text-gray-400"></i>
+          <figure class="relative h-48 bg-gray-100 dark:bg-gray-700 rounded-t-lg flex items-center justify-center">
+            <i class="fas fa-book text-4xl text-gray-400 dark:text-gray-300"></i>
           </figure>
         {% endif %}
         
         <div class="card-body p-4">
           <div class="flex justify-between items-start">
-            <h3 class="card-title text-lg font-semibold">{{ listing.title }}</h3>
+            <h3 class="card-title text-lg font-semibold text-gray-900 dark:text-gray-100">{{ listing.title }}</h3>
             {% if listing.donation_type == 'paid' %}
               <span class="badge badge-primary">{{ listing.price }} ₺</span>
             {% endif %}
           </div>
           
-          <div class="flex items-center text-sm text-gray-500 mt-1">
+          <div class="flex items-center text-sm text-gray-500 dark:text-gray-300 mt-1">
             <i class="fas fa-graduation-cap mr-1"></i>
             <span>{{ listing.get_level_display }}</span>
           </div>
           
-          <div class="flex items-center text-sm text-gray-500 mt-1">
+          <div class="flex items-center text-sm text-gray-500 dark:text-gray-300 mt-1">
             <i class="fas fa-bookmark mr-1"></i>
             <span>{{ listing.related_course|default:"Genel" }}</span>
           </div>
           
-          <div class="mt-4 border-t pt-3">
+          <div class="mt-4 border-t border-gray-200 dark:border-gray-700 pt-3">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium">İlgilenenler:</span>
+              <span class="text-sm font-medium text-gray-900 dark:text-gray-100">İlgilenenler:</span>
               <span class="badge badge-secondary">{{ listing.interested_users.count }}</span>
             </div>
             
@@ -59,21 +59,21 @@
               <div class="avatar-group -space-x-3">
                 {% for interested in listing.interested_users|slice:":5" %}
                   <div class="avatar placeholder">
-                    <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300 flex items-center justify-center">
                       <span class="text-xs">{{ interested.user.username|first|upper }}</span>
                     </div>
                   </div>
                 {% endfor %}
                 {% if listing.interested_users.count > 5 %}
                   <div class="avatar placeholder">
-                    <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
                       <span class="text-xs">+{{ listing.interested_users.count|add:"-5" }}</span>
                     </div>
                   </div>
                 {% endif %}
               </div>
             {% else %}
-              <p class="text-sm text-gray-400 italic">Henüz ilgilenen yok</p>
+              <p class="text-sm italic text-gray-400 dark:text-gray-500">Henüz ilgilenen yok</p>
             {% endif %}
           </div>
           
@@ -96,10 +96,10 @@
       {% endfor %}
     </div>
   {% else %}
-    <div class="text-center py-12 bg-white rounded-lg shadow-sm">
-      <i class="fas fa-book-open text-4xl text-gray-300 mb-4"></i>
-      <h3 class="text-lg font-medium text-gray-500">Henüz ilanınız bulunmamaktadır</h3>
-      <p class="text-gray-400 mt-2">Paylaşmak istediğiniz kitap veya ders notlarınızı ekleyin!</p>
+    <div class="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+      <i class="fas fa-book-open text-4xl text-gray-300 dark:text-gray-500 mb-4"></i>
+      <h3 class="text-lg font-medium text-gray-500 dark:text-gray-300">Henüz ilanınız bulunmamaktadır</h3>
+      <p class="text-gray-400 dark:text-gray-400 mt-2">Paylaşmak istediğiniz kitap veya ders notlarınızı ekleyin!</p>
       <a href="{% url 'create_listing' %}" class="btn btn-primary mt-4">
         <i class="fas fa-plus mr-2"></i> Yeni İlan Oluştur
       </a>

@@ -10,18 +10,18 @@
     <p class="mt-2 opacity-90">Topluluğumuza en çok katkı sağlayan fedakar üyelerimiz</p>
   </div>
 
-  <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-    <div role="tablist" class="flex border-b border-gray-200">
-      <button role="tab" class="px-6 py-3 font-medium text-sm border-b-2 border-primary text-primary transition" 
-              onclick="showTab('weekly')">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden mb-8">
+    <div role="tablist" class="flex border-b border-gray-200 dark:border-gray-700">
+      <button role="tab" class="px-6 py-3 font-medium text-sm border-b-2 border-primary text-primary dark:text-primary transition" 
+              onclick="showTab('weekly', event)">
         <i class="fas fa-calendar-week mr-2"></i> Haftalık
       </button>
-      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 hover:text-primary transition" 
-              onclick="showTab('monthly')">
+      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 dark:text-gray-400 hover:text-primary transition" 
+              onclick="showTab('monthly', event)">
         <i class="fas fa-calendar-alt mr-2"></i> Aylık
       </button>
-      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 hover:text-primary transition" 
-              onclick="showTab('all')">
+      <button role="tab" class="px-6 py-3 font-medium text-sm text-gray-500 dark:text-gray-400 hover:text-primary transition" 
+              onclick="showTab('all', event)">
         <i class="fas fa-award mr-2"></i> Tüm Zamanlar
       </button>
     </div>
@@ -41,7 +41,7 @@
 </div>
 
 <script>
-  function showTab(id) {
+  function showTab(id, event) {
     const panes = document.querySelectorAll('.tab-pane');
     panes.forEach(pane => pane.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
@@ -49,11 +49,11 @@
     const tabs = document.querySelectorAll('[role="tab"]');
     tabs.forEach(tab => {
       tab.classList.remove('text-primary', 'border-primary');
-      tab.classList.add('text-gray-500');
+      tab.classList.add('text-gray-500', 'dark:text-gray-400');
     });
     
     event.target.classList.add('text-primary', 'border-primary');
-    event.target.classList.remove('text-gray-500');
+    event.target.classList.remove('text-gray-500', 'dark:text-gray-400');
   }
 </script>
 {% endblock %}

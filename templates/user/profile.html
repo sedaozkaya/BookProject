@@ -15,29 +15,29 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-b-xl shadow-md divide-y divide-gray-100">
+  <div class="bg-white dark:bg-gray-800 rounded-b-xl shadow-md divide-y divide-gray-100 dark:divide-gray-700">
     <div class="p-6 space-y-4">
       <div class="flex items-center">
         <i class="fas fa-user text-gray-400 w-6 mr-3"></i>
         <div>
-          <p class="text-sm text-gray-500">Kullanıcı Adı</p>
-          <p class="font-medium">{{ user.username }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Kullanıcı Adı</p>
+          <p class="font-medium text-gray-900 dark:text-gray-100">{{ user.username }}</p>
         </div>
       </div>
       
       <div class="flex items-center">
         <i class="fas fa-envelope text-gray-400 w-6 mr-3"></i>
         <div>
-          <p class="text-sm text-gray-500">E-posta</p>
-          <p class="font-medium">{{ user.email }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">E-posta</p>
+          <p class="font-medium text-gray-900 dark:text-gray-100">{{ user.email }}</p>
         </div>
       </div>
       
       <div class="flex items-center">
         <i class="fas fa-calendar-alt text-gray-400 w-6 mr-3"></i>
         <div>
-          <p class="text-sm text-gray-500">Kayıt Tarihi</p>
-          <p class="font-medium">{{ user.date_joined|date:"d.m.Y H:i" }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Kayıt Tarihi</p>
+          <p class="font-medium text-gray-900 dark:text-gray-100">{{ user.date_joined|date:"d.m.Y H:i" }}</p>
         </div>
       </div>
     </div>

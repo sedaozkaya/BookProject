@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block title %}Giriş Yap | Bookloop{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto my-10">
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
     <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6 text-center">
       <i class="fas fa-user-lock text-3xl mb-2"></i>
       <h1 class="text-2xl font-bold">Hesabınıza Giriş Yapın</h1>
@@ -15,9 +16,9 @@
       {% for field in form %}
       <div class="form-control">
         <label class="label" for="{{ field.id_for_label }}">
-          <span class="label-text">{{ field.label }}</span>
+          <span class="label-text dark:text-gray-300">{{ field.label }}</span>
         </label>
-        {{ field }}
+        {{ field|add_class:"bg-white dark:bg-gray-700 text-gray-900 dark:text-white input input-bordered" }}
         {% for error in field.errors %}
           <p class="text-xs text-red-500 mt-1">{{ error }}</p>
         {% endfor %}
@@ -28,13 +29,13 @@
         <i class="fas fa-sign-in-alt mr-2"></i> Giriş Yap
       </button>
 
-      <div class="divider">veya</div>
+      <div class="divider dark:text-gray-400">veya</div>
 
       <div class="text-center space-y-3">
         <a href="{% url 'password_reset_request' %}" class="link link-hover text-sm text-primary">
           <i class="fas fa-key mr-1"></i> Şifremi Unuttum
         </a>
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
           Hesabınız yok mu? 
           <a href="{% url 'register' %}" class="link link-hover text-primary font-medium">
             Kayıt Olun

@@ -2,13 +2,13 @@
 {% load widget_tweaks %}
 
 {% block content %}
-    
+
 {% if form.errors %}
-<div class="alert alert-error mb-6">
+<div class="alert alert-error mb-6 dark:bg-red-900 dark:text-white">
   <div>
     <i class="fas fa-exclamation-circle"></i>
     <span>Formda hatalar bulunuyor:</span>
-    <ul class="mt-2">
+    <ul class="mt-2 list-disc list-inside">
       {% for field, errors in form.errors.items %}
         {% for error in errors %}
           <li>- {{ field }}: {{ error }}</li>
@@ -18,8 +18,9 @@
   </div>
 </div>
 {% endif %}
+
 <div class="max-w-4xl mx-auto my-8">
-  <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
    
     <div class="bg-gradient-to-r from-primary to-indigo-600 text-white p-6">
       <h1 class="text-2xl font-bold flex items-center">
@@ -28,136 +29,125 @@
       <p class="text-sm opacity-90 mt-1">Kitap veya ders notlarınızı paylaşın</p>
     </div>
 
-  
     <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
       {% csrf_token %}
       {{ form.non_field_errors }}
->
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
         <div class="form-control">
-          <label class="label" for="{{ form.title.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.title.id_for_label }}">
             <span class="label-text">{{ form.title.label }}</span>
           </label>
-          {{ form.title|add_class:"input input-bordered w-full focus:ring-2 focus:ring-primary" }}
+          {{ form.title|add_class:"input input-bordered w-full focus:ring-2 focus:ring-primary dark:bg-gray-900 dark:text-white" }}
           {% if form.title.errors %}
             <p class="text-red-500 text-sm mt-1">{{ form.title.errors|striptags }}</p>
           {% endif %}
         </div>
 
         <div class="form-control">
-          <label class="label" for="{{ form.listing_type.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.listing_type.id_for_label }}">
             <span class="label-text">{{ form.listing_type.label }}</span>
           </label>
-          {{ form.listing_type|add_class:"select select-bordered w-full focus:ring-2 focus:ring-primary" }}
+          {{ form.listing_type|add_class:"select select-bordered w-full focus:ring-2 focus:ring-primary dark:bg-gray-900 dark:text-white" }}
         </div>
       </div>
 
-      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="dynamic-fields">
-       
         <div class="form-control">
-          <label class="label" for="{{ form.level.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.level.id_for_label }}">
             <span class="label-text">{{ form.level.label }}</span>
           </label>
-          {{ form.level|add_class:"select select-bordered w-full" }}
+          {{ form.level|add_class:"select select-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
 
-        
         <div class="form-control">
-          <label class="label" for="{{ form.donation_type.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.donation_type.id_for_label }}">
             <span class="label-text">{{ form.donation_type.label }}</span>
           </label>
-          {{ form.donation_type|add_class:"select select-bordered w-full" }}
+          {{ form.donation_type|add_class:"select select-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
 
-      
         <div class="form-control hidden" id="price-field">
-          <label class="label" for="{{ form.price.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.price.id_for_label }}">
             <span class="label-text">{{ form.price.label }}</span>
           </label>
           <div class="relative">
-            {{ form.price|add_class:"input input-bordered w-full pl-8" }}
-            <span class="absolute left-3 top-3 text-gray-500">₺</span>
+            {{ form.price|add_class:"input input-bordered w-full pl-8 dark:bg-gray-900 dark:text-white" }}
+            <span class="absolute left-3 top-3 text-gray-500 dark:text-gray-400">₺</span>
           </div>
         </div>
       </div>
 
- 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden" id="book-fields">
         <div class="form-control">
-          <label class="label" for="{{ form.publish_year.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.publish_year.id_for_label }}">
             <span class="label-text">{{ form.publish_year.label }}</span>
           </label>
-          {{ form.publish_year|add_class:"input input-bordered w-full" }}
+          {{ form.publish_year|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
 
         <div class="form-control">
-          <label class="label" for="{{ form.publisher.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.publisher.id_for_label }}">
             <span class="label-text">{{ form.publisher.label }}</span>
           </label>
-          {{ form.publisher|add_class:"input input-bordered w-full" }}
+          {{ form.publisher|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
       </div>
 
-     
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden" id="note-fields">
         <div class="form-control">
-          <label class="label" for="{{ form.school_name.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.school_name.id_for_label }}">
             <span class="label-text">{{ form.school_name.label }}</span>
           </label>
-          {{ form.school_name|add_class:"input input-bordered w-full" }}
+          {{ form.school_name|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
 
         <div class="form-control">
-          <label class="label" for="{{ form.valid_year.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.valid_year.id_for_label }}">
             <span class="label-text">{{ form.valid_year.label }}</span>
           </label>
-          {{ form.valid_year|add_class:"input input-bordered w-full" }}
+          {{ form.valid_year|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
       </div>
 
-      
       <div class="grid grid-cols-1 gap-6">
         <div class="form-control">
-          <label class="label" for="{{ form.related_course.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.related_course.id_for_label }}">
             <span class="label-text">{{ form.related_course.label }}</span>
           </label>
-          {{ form.related_course|add_class:"input input-bordered w-full" }}
+          {{ form.related_course|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
         </div>
 
-     
         <div class="form-control">
-          <label class="label" for="{{ form.page_count.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.page_count.id_for_label }}">
             <span class="label-text">{{ form.page_count.label }}</span>
           </label>
-          {{ form.page_count|add_class:"input input-bordered w-full" }}
+          {{ form.page_count|add_class:"input input-bordered w-full dark:bg-gray-900 dark:text-white" }}
           {% if form.page_count.errors %}
             <p class="text-red-500 text-sm mt-1">{{ form.page_count.errors|striptags }}</p>
           {% endif %}
-          <p class="text-sm text-gray-500 mt-1">Toplam sayfa sayısı</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Toplam sayfa sayısı</p>
         </div>
 
         <div class="form-control">
-          <label class="label" for="{{ form.description.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.description.id_for_label }}">
             <span class="label-text">{{ form.description.label }}</span>
           </label>
-          {{ form.description|add_class:"textarea textarea-bordered w-full h-32" }}
+          {{ form.description|add_class:"textarea textarea-bordered w-full h-32 dark:bg-gray-900 dark:text-white" }}
         </div>
 
         <div class="form-control">
-          <label class="label" for="{{ form.image.id_for_label }}">
+          <label class="label text-gray-700 dark:text-gray-200" for="{{ form.image.id_for_label }}">
             <span class="label-text">{{ form.image.label }}</span>
           </label>
           <div class="file-input">
-            {{ form.image|add_class:"file-input file-input-bordered w-full" }}
+            {{ form.image|add_class:"file-input file-input-bordered w-full dark:bg-gray-900 dark:text-white" }}
           </div>
-          <p class="text-sm text-gray-500 mt-1">JPEG veya PNG formatında yükleyin</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">JPEG veya PNG formatında yükleyin</p>
         </div>
       </div>
 
-    
-      <div class="flex justify-end space-x-4 pt-6 border-t">
+      <div class="flex justify-end space-x-4 pt-6 border-t dark:border-gray-700">
         <a href="{% url 'home' %}" class="btn btn-outline">İptal</a>
         <button type="submit" class="btn btn-primary">
           <i class="fas fa-save mr-2"></i> İlanı Yayınla
@@ -176,14 +166,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const noteFields = document.getElementById('note-fields');
 
   function updateFields() {
-    
     if (donationType.value === 'paid') {
       priceField.classList.remove('hidden');
     } else {
       priceField.classList.add('hidden');
     }
 
-    
     if (listingType.value === 'book') {
       bookFields.classList.remove('hidden');
       noteFields.classList.add('hidden');
@@ -196,21 +184,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  
   listingType.addEventListener('change', updateFields);
   donationType.addEventListener('change', updateFields);
-
- 
   updateFields();
 });
 </script>
 
 <style>
 .file-input::file-selector-button {
-  @apply bg-gray-100 text-gray-700 border-r border-gray-300 px-4 py-2 mr-2;
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white border-r border-gray-300 dark:border-gray-600 px-4 py-2 mr-2;
 }
 .file-input:hover::file-selector-button {
-  @apply bg-gray-200;
+  @apply bg-gray-200 dark:bg-gray-600;
 }
 </style>
+
 {% endblock %}

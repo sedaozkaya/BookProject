@@ -1,23 +1,23 @@
 {% if donors %}
   <div class="space-y-4">
     {% for user in donors %}
-      <div class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+      <div class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition">
         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-4">
           {{ forloop.counter }}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="font-medium text-gray-900 truncate">
+          <p class="font-medium text-gray-900 dark:text-gray-200 truncate">
             {{ user.username }}
             {% if forloop.first %}
               <span class="ml-2 text-yellow-500"><i class="fas fa-crown"></i></span>
             {% endif %}
           </p>
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-gray-500 dark:text-gray-300">
             {{ user.free_count }} bağış
           </p>
         </div>
         <div class="ml-4">
-          <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+          <span class="px-3 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 text-sm font-medium rounded-full">
             <i class="fas fa-gift mr-1"></i> {{ user.free_count }}
           </span>
         </div>
@@ -26,8 +26,8 @@
   </div>
 {% else %}
   <div class="text-center py-8">
-    <i class="fas fa-gift text-4xl text-gray-300 mb-3"></i>
-    <p class="text-gray-500">Henüz bağış yapan kullanıcı bulunamadı</p>
-    <p class="text-gray-400 text-sm mt-2">İlk bağışçı siz olun!</p>
+    <i class="fas fa-gift text-4xl text-gray-300 dark:text-gray-500 mb-3"></i>
+    <p class="text-gray-500 dark:text-gray-300">Henüz bağış yapan kullanıcı bulunamadı</p>
+    <p class="text-gray-400 dark:text-gray-400 text-sm mt-2">İlk bağışçı siz olun!</p>
   </div>
 {% endif %}
