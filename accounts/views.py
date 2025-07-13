@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+
+from BookProject.settings import DEFAULT_FROM_EMAIL
 from .models import PasswordResetCode
 from .forms import PasswordResetRequestForm, PasswordResetCodeForm, SetNewPasswordForm
 from django.contrib import messages
@@ -19,7 +21,7 @@ def password_reset_request_view(request):
                 send_mail(
                     subject='Şifre Sıfırlama Kodu',
                     message=f'Şifre sıfırlama kodunuz: {reset_code.code}',
-                    from_email='bookloop.destek@gmail.com',
+                    from_email=DEFAULT_FROM_EMAIL,
                     recipient_list=[email],
                     fail_silently=False,
                 )
@@ -103,7 +105,7 @@ def delete_account(request):
                 send_mail(
                     subject='BookLoop Hesabınız Silindi',
                     message=f'Merhaba {username},\n\nBookLoop hesabınız başarıyla silinmiştir.',
-                    from_email='bookloop.destek@gmail.com',
+                    from_email=DEFAULT_FROM_EMAIL,
                     recipient_list=[email],
                     fail_silently=False,
                 )

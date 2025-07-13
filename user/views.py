@@ -4,11 +4,11 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 
+from django.db.models import Prefetch
+from listings.models import Listing, Interested
 from django.db.models import Count, Q
 
-from user.forms import UserUpdateForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 
@@ -33,8 +33,7 @@ def register(request):
 def profile_view(request):
     return render(request, 'user/profile.html')
 
-from django.db.models import Prefetch
-from listings.models import Listing, Interested
+
 
 @login_required
 def my_listings(request):
@@ -94,10 +93,6 @@ def top_donors(request):
 
     return render(request, 'user/top_donors.html', context)
 
-
-
-
-from django.shortcuts import redirect
 
 def toggle_dark_mode(request):
     response = redirect(request.META.get('HTTP_REFERER', '/'))

@@ -28,7 +28,7 @@ def start_conversation(request, listing_id):
 def conversation_detail(request, conversation_id):
     conversation = get_object_or_404(Conversation, id=conversation_id)
 
-    # Yetki kontrolü
+
     if request.user != conversation.buyer and request.user != conversation.seller:
         django_messages.error(request, "Bu konuşmaya erişim yetkiniz yok.")
         return redirect('home')
