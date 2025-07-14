@@ -1,21 +1,18 @@
-         {
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      },
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.py"
-    }
-  ]
+{
+    "builds": [
+        {
+            "src": "BookProject/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "15mb",
+                "runtime": "python3.12"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "BookProject/wsgi.py"
+        }
+    ]
 }
