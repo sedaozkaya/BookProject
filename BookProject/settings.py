@@ -11,12 +11,26 @@ from decouple import config
 from dotenv import load_dotenv
 
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = 'django-insecure-fkp-*r+2b1#u#=4(phf8$jqaw!kw!w)bc^t7uq%ma6sz+_f+9d'
-DEBUG = True
-ALLOWED_HOSTS = []
+
+load_dotenv()
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+
+DATABASES = {
+    'default': dj_database_url.config(default=config('DATABASE_URL'))
+}
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
 
 
 INSTALLED_APPS = [
@@ -48,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 ROOT_URLCONF = 'BookProject.urls'
 
 TEMPLATES = [
@@ -70,12 +85,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'BookProject.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -98,10 +108,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 MEDIA_URL = '/media/'
